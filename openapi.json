@@ -1,0 +1,768 @@
+{
+	"openapi": "3.0.3",
+	"info": {
+		"title": "Auto-Grow API",
+		"description": "API documentation for Auto-Grow system. All API endpoints require HTTP Basic Authentication.",
+		"version": "1.0.0"
+	},
+	"tags": [
+		{
+			"name": "devices",
+			"description": "Device management endpoints"
+		},
+		{
+			"name": "stages",
+			"description": "Stage management endpoints"
+		},
+		{
+			"name": "protocols",
+			"description": "Protocol management endpoints"
+		},
+		{
+			"name": "trackings",
+			"description": "Tracking management endpoints"
+		}
+	],
+	"components": {
+		"securitySchemes": {
+			"basicAuth": {
+				"type": "http",
+				"scheme": "basic",
+				"description": "HTTP Basic Authentication. Use the credentials configured in your environment variables (API_USERNAME and API_PASSWORD)."
+			}
+		},
+		"schemas": {}
+	},
+	"security": [
+		{
+			"basicAuth": []
+		}
+	],
+	"paths": {
+		"/": {
+			"get": {
+				"operationId": "getIndex",
+				"responses": {
+					"200": {}
+				}
+			}
+		},
+		"/api/devices/": {
+			"get": {
+				"operationId": "getApiDevices",
+				"responses": {
+					"200": {}
+				}
+			},
+			"post": {
+				"parameters": [],
+				"operationId": "postApiDevices",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"status": {
+										"type": "string"
+									}
+								},
+								"required": ["name", "status"]
+							}
+						},
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"status": {
+										"type": "string"
+									}
+								},
+								"required": ["name", "status"]
+							}
+						},
+						"text/plain": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"status": {
+										"type": "string"
+									}
+								},
+								"required": ["name", "status"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {}
+				}
+			}
+		},
+		"/api/devices/{id}": {
+			"get": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "getApiDevicesById",
+				"responses": {
+					"200": {}
+				}
+			},
+			"put": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "putApiDevicesById",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"status": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"status": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"text/plain": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"status": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {}
+				}
+			},
+			"delete": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "deleteApiDevicesById",
+				"responses": {
+					"200": {}
+				}
+			}
+		},
+		"/api/stages/": {
+			"get": {
+				"operationId": "getApiStages",
+				"responses": {
+					"200": {}
+				}
+			},
+			"post": {
+				"parameters": [],
+				"operationId": "postApiStages",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									}
+								},
+								"required": ["name"]
+							}
+						},
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									}
+								},
+								"required": ["name"]
+							}
+						},
+						"text/plain": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									}
+								},
+								"required": ["name"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {}
+				}
+			}
+		},
+		"/api/stages/{id}": {
+			"get": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "getApiStagesById",
+				"responses": {
+					"200": {}
+				}
+			},
+			"put": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "putApiStagesById",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"text/plain": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {}
+				}
+			},
+			"delete": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "deleteApiStagesById",
+				"responses": {
+					"200": {}
+				}
+			}
+		},
+		"/api/protocols/": {
+			"get": {
+				"operationId": "getApiProtocols",
+				"responses": {
+					"200": {}
+				}
+			},
+			"post": {
+				"parameters": [],
+				"operationId": "postApiProtocols",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"stageId": {
+										"type": "number"
+									},
+									"delay": {
+										"type": "number"
+									}
+								},
+								"required": ["name", "stageId", "delay"]
+							}
+						},
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"stageId": {
+										"type": "number"
+									},
+									"delay": {
+										"type": "number"
+									}
+								},
+								"required": ["name", "stageId", "delay"]
+							}
+						},
+						"text/plain": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"stageId": {
+										"type": "number"
+									},
+									"delay": {
+										"type": "number"
+									}
+								},
+								"required": ["name", "stageId", "delay"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {}
+				}
+			}
+		},
+		"/api/protocols/{id}": {
+			"get": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "getApiProtocolsById",
+				"responses": {
+					"200": {}
+				}
+			},
+			"put": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "putApiProtocolsById",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"stageId": {
+										"type": "number"
+									},
+									"delay": {
+										"type": "number"
+									}
+								}
+							}
+						},
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"stageId": {
+										"type": "number"
+									},
+									"delay": {
+										"type": "number"
+									}
+								}
+							}
+						},
+						"text/plain": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"stageId": {
+										"type": "number"
+									},
+									"delay": {
+										"type": "number"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {}
+				}
+			},
+			"delete": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "deleteApiProtocolsById",
+				"responses": {
+					"200": {}
+				}
+			}
+		},
+		"/api/trackings/": {
+			"get": {
+				"operationId": "getApiTrackings",
+				"responses": {
+					"200": {}
+				}
+			},
+			"post": {
+				"parameters": [],
+				"operationId": "postApiTrackings",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"deviceId": {
+										"type": "number"
+									},
+									"temperature": {
+										"type": "number"
+									},
+									"airHumidity": {
+										"type": "number"
+									},
+									"soilHumidity": {
+										"type": "number"
+									},
+									"co2": {
+										"type": "number"
+									},
+									"ppfd": {
+										"type": "number"
+									}
+								},
+								"required": [
+									"deviceId",
+									"temperature",
+									"airHumidity",
+									"soilHumidity",
+									"co2",
+									"ppfd"
+								]
+							}
+						},
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"deviceId": {
+										"type": "number"
+									},
+									"temperature": {
+										"type": "number"
+									},
+									"airHumidity": {
+										"type": "number"
+									},
+									"soilHumidity": {
+										"type": "number"
+									},
+									"co2": {
+										"type": "number"
+									},
+									"ppfd": {
+										"type": "number"
+									}
+								},
+								"required": [
+									"deviceId",
+									"temperature",
+									"airHumidity",
+									"soilHumidity",
+									"co2",
+									"ppfd"
+								]
+							}
+						},
+						"text/plain": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"deviceId": {
+										"type": "number"
+									},
+									"temperature": {
+										"type": "number"
+									},
+									"airHumidity": {
+										"type": "number"
+									},
+									"soilHumidity": {
+										"type": "number"
+									},
+									"co2": {
+										"type": "number"
+									},
+									"ppfd": {
+										"type": "number"
+									}
+								},
+								"required": [
+									"deviceId",
+									"temperature",
+									"airHumidity",
+									"soilHumidity",
+									"co2",
+									"ppfd"
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {}
+				}
+			}
+		},
+		"/api/trackings/{id}": {
+			"get": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "getApiTrackingsById",
+				"responses": {
+					"200": {}
+				}
+			},
+			"put": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "putApiTrackingsById",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"deviceId": {
+										"type": "number"
+									},
+									"protocolId": {
+										"type": "number"
+									},
+									"temperature": {
+										"type": "number"
+									},
+									"humidity": {
+										"type": "number"
+									}
+								}
+							}
+						},
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"deviceId": {
+										"type": "number"
+									},
+									"protocolId": {
+										"type": "number"
+									},
+									"temperature": {
+										"type": "number"
+									},
+									"humidity": {
+										"type": "number"
+									}
+								}
+							}
+						},
+						"text/plain": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"deviceId": {
+										"type": "number"
+									},
+									"protocolId": {
+										"type": "number"
+									},
+									"temperature": {
+										"type": "number"
+									},
+									"humidity": {
+										"type": "number"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {}
+				}
+			},
+			"delete": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "id",
+						"required": true
+					}
+				],
+				"operationId": "deleteApiTrackingsById",
+				"responses": {
+					"200": {}
+				}
+			}
+		},
+		"/api/trackings/device/{deviceId}": {
+			"get": {
+				"parameters": [
+					{
+						"schema": {
+							"type": "string"
+						},
+						"in": "path",
+						"name": "deviceId",
+						"required": true
+					}
+				],
+				"operationId": "getApiTrackingsDeviceByDeviceId",
+				"responses": {
+					"200": {}
+				}
+			}
+		}
+	}
+}

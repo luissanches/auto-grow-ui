@@ -1,0 +1,9 @@
+
+create an ui project using bun, tanstack router, shadcn.
+create a login screen with user and password as a initial public route.
+create the dashboard screen as defautl router when the user log into the app.
+create a devices, stages,  protocols, and tracking screens as privete routes. These screens need to list the related records returned
+from the api as defined in aopenapi.json file.
+
+create an auth api that receive user and password and validate them against a env vars. after that configure login page request this new auth api.
+
