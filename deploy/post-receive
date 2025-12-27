@@ -28,9 +28,10 @@ do
 
     echo "✅ Restarting Server..."
 
-    pm2 restart "PORT=8080 bun index.html" --name auto-grow-ui
+    pm2 stop auto-grow-ui
+    pm2 start "PORT=8080 bun $APP_DIR/dist/index.html" --name auto-grow-ui
     pm2 save 
-    
+
     echo "🚀 Deployed Sucessfully..."
   fi
 done

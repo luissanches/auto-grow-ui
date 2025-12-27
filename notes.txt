@@ -71,4 +71,5 @@ ssh auto-grow-api
 export NODE_ENV=production
 cd /var/www/auto-grow-ui/dist
 pm2 start "PORT=8080 bun index.html" --name auto-grow-ui
+pm2 restart "PORT=8080 ~/.bun/bin/bun /var/www/auto-grow-ui/dist/index.html" --name auto-grow-ui
 export VITE_API_BASE_URL=http://34.206.100.251:3000
