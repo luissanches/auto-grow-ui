@@ -84,26 +84,30 @@ function TrackingDetailsComponent() {
 									Device Information
 								</h3>
 								<div className="space-y-2">
-									<div className="flex justify-between">
+									<div className="flex justify-start">
 										<span className="text-muted-foreground">Device Name:</span>
-										<span className="font-medium">{tracking.device.name}</span>
+										<span className="font-medium  ml-2">
+											{tracking.device.name}
+										</span>
 									</div>
-									<div className="flex justify-between">
+									<div className="flex justify-start">
 										<span className="text-muted-foreground">Device ID:</span>
-										<span className="font-medium">{tracking.deviceId}</span>
+										<span className="font-medium  ml-2">
+											{tracking.deviceId}
+										</span>
 									</div>
-									<div className="flex justify-between">
+									<div className="flex justify-start">
 										<span className="text-muted-foreground">
 											Device Status:
 										</span>
-										<span className="font-medium">
+										<span className="font-medium  ml-2">
 											{tracking.device.status}
 										</span>
 									</div>
 									{tracking.device.stage && (
 										<div className="flex justify-between">
 											<span className="text-muted-foreground">Stage:</span>
-											<span className="font-medium">
+											<span className="font-medium  ml-2">
 												{tracking.device.stage.name}
 											</span>
 										</div>
@@ -116,17 +120,21 @@ function TrackingDetailsComponent() {
 									Tracking Information
 								</h3>
 								<div className="space-y-2">
-									<div className="flex justify-between">
+									<div className="flex justify-start">
 										<span className="text-muted-foreground">Tracking ID:</span>
-										<span className="font-medium">{tracking.id}</span>
+										<span className="font-medium  ml-2">{tracking.id}</span>
 									</div>
-									<div className="flex justify-between">
-										<span className="text-muted-foreground">Protocol ID:</span>
-										<span className="font-medium">{tracking.protocolId}</span>
+									<div className="flex justify-start">
+										<span className="text-muted-foreground">
+											Protocol Used:
+										</span>
+										<span className="font-medium  ml-2">
+											{tracking.protocol?.name}
+										</span>
 									</div>
-									<div className="flex justify-between">
+									<div className="flex justify-start">
 										<span className="text-muted-foreground">Created At:</span>
-										<span className="font-medium">
+										<span className="font-medium  ml-2">
 											{formatDate(tracking.createdAt)}
 										</span>
 									</div>
@@ -190,12 +198,12 @@ function TrackingDetailsComponent() {
 								<Card>
 									<CardHeader className="pb-3">
 										<CardTitle className="text-sm font-medium text-muted-foreground">
-											PPFD
+											Lux
 										</CardTitle>
 									</CardHeader>
 									<CardContent>
 										<div className="text-2xl font-bold">
-											{tracking.ppfd} µmol/m²/s
+											{tracking.lux} lumens
 										</div>
 									</CardContent>
 								</Card>
@@ -216,6 +224,176 @@ function TrackingDetailsComponent() {
 								)}
 							</div>
 						</div>
+
+						{tracking.protocol && (
+							<div>
+								<h3 className="text-lg font-semibold mb-4">Protocol</h3>
+								<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+									<Card>
+										<CardHeader className="pb-3">
+											<CardTitle className="text-sm font-medium text-muted-foreground">
+												Protocol Name
+											</CardTitle>
+										</CardHeader>
+										<CardContent>
+											<div className="text-2xl font-bold">
+												{tracking.protocol.name}
+											</div>
+										</CardContent>
+									</Card>
+
+									{tracking.protocol.stage && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Stage
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.protocol.stage.name}
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.protocol.startHour !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Start Hour
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.protocol.startHour}:00
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.protocol.endHour !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													End Hour
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.protocol.endHour}:00
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.protocol.idealLightIntensity !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Ideal Light Intensity
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.protocol.idealLightIntensity} µmol/m²/s
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.protocol.idealTemperature !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Ideal Temperature
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.protocol.idealTemperature}°C
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.protocol.idealAirHumidity !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Ideal Air Humidity
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.protocol.idealAirHumidity}%
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.protocol.idealSoilHumidity !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Ideal Soil Humidity
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.protocol.idealSoilHumidity}%
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.protocol.idealExausterIntensity !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Ideal Exauster Intensity
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.protocol.idealExausterIntensity}
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.protocol.idealBlowerIntensity !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Ideal Blower Intensity
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.protocol.idealBlowerIntensity}
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.protocol.idealCo2 !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Ideal CO2
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.protocol.idealCo2} ppm
+												</div>
+											</CardContent>
+										</Card>
+									)}
+								</div>
+							</div>
+						)}
 					</div>
 				</CardContent>
 			</Card>

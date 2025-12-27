@@ -290,7 +290,7 @@ export interface Tracking {
 	airHumidity: number;
 	soilHumidity: number;
 	co2: number;
-	ppfd: number;
+	lux: number;
 	humidity: number;
 	createdAt: string;
 	protocol?: Protocol;
