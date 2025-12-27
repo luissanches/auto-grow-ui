@@ -38,57 +38,37 @@ and also create a session with turnACOn, turnLightIntensity, turnHumidifierOn, t
 
 
  ____ DEPLOY _____
-ssh auto-grow-api
+ssh auto-grow
+
+/srv/git/auto-grow-ui.git/hooks/post-receive
+/var/www/auto-grow-ui/dist
 
 ### Bare Repo ###
 -- create remote repo --
 sudo mkdir -p /srv/git
 sudo chown -R ubuntu:ubuntu /srv/git
 cd /srv/git
-git init --bare auto-grow-api.git
+git init --bare auto-grow-ui.git
 
 -- create app dir --
-mkdir -p /var/www/auto-grow-api
+mkdir -p /var/www/auto-grow-ui
 
 -- Add post-receive hook --
 cd /srv/git/auto-grow-api.git/hooks
 nano post-receive
 
-#!/bin/bash
-set -e
-
-echo "starting deploy..."
-
-APP_DIR=/var/www/auto-grow-api
-GIT_DIR=/srv/git/auto-grow-api.git
-
-git --work-tree=$APP_DIR --git-dir=$GIT_DIR checkout -f
-
-cd $APP_DIR/api
-bun install --production
-bun run compile
-
-#pm2 restart auto-grow-api || pm2 start index.js --name auto-grow-api
-#pm2 save
 
 -- add permission --
 chmod +x post-receive
 
 -- configure git remote --
-git remote add production  ssh://auto-grow-api:/srv/git/auto-grow-api.git
+git remote add production  ssh://auto-grow:/srv/git/auto-grow-ui.git
 
 -- deploy --
 git push production main
 ssh auto-grow-api
 
 export NODE_ENV=production
-export API_USERNAME=admin
-export API_PASSWORD=admin
-export DB_PATH=/Users/luissanches/Projects/auto-grow/api/data/auto-grow.db
-
-
-
-nohup PORT=8080 bun index.html > bun.log 2>&1 &
-
-pm2 start "PORT=8080 bun index.html" --name bun-static
-pm2 save
+cd /var/www/auto-grow-ui/dist
+pm2 start "PORT=8080 bun index.html" --name auto-grow-ui
+export VITE_API_BASE_URL=http://34.206.100.251:3000
