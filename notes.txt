@@ -74,3 +74,11 @@ cd /var/www/auto-grow-ui/dist
 export VITE_API_BASE_URL=http://34.206.100.251:3000
 
 curl http://34.206.100.251:8080
+nginx -y installing nginx
+sudo systemctl status nginx
+sudo systemctl reload nginx
+
+sudo vi /etc/nginx/sites-available/default
+location /api/ {
+    proxy_pass http://localhost:3000;
+}
