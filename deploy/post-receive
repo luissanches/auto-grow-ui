@@ -28,9 +28,8 @@ do
 
     echo "✅ Restarting Server..."
 
-    pm2 delete auto-grow-ui
-    pm2 start "PORT=8080 HOST=0.0.0.0 bun /var/www/auto-grow-ui/dist/index.html" --name auto-grow-ui
-    pm2 save 
+    cp -r /var/www/auto-grow-ui/dist/* /var/www/html/
+    sudo systemctl reload nginx
 
     echo "🚀 Deployed Sucessfully..." 
   fi
