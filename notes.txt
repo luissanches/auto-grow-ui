@@ -70,6 +70,7 @@ ssh auto-grow-api
 
 export NODE_ENV=production
 cd /var/www/auto-grow-ui/dist
+/srv/git/auto-grow-ui.git/hooks/post-receive
 export VITE_API_BASE_URL=http://34.206.100.251:3000
 
 curl http://34.206.100.251:8080

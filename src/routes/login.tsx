@@ -1,6 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -9,7 +7,9 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 
 export const Route = createFileRoute("/login")({
 	component: LoginComponent,
@@ -46,7 +46,7 @@ function LoginComponent() {
 		<div className="min-h-screen flex items-center justify-center bg-muted/40">
 			<Card className="w-full max-w-md">
 				<CardHeader>
-					<CardTitle>Login</CardTitle>
+					<CardTitle>Login - v1.1</CardTitle>
 					<CardDescription>
 						Enter your credentials to access Auto-Grow
 					</CardDescription>
