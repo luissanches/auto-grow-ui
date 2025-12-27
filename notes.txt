@@ -10,7 +10,16 @@ create an auth api that receive user and password and validate them against a en
 make modification on device screen to edit a device into a subroute screen. use as reference the openapi.json file as api. 
 the user can change the name and the stage which is a selection box that retrieves the available stages from api.
 
+make modification on protocol screen to edit a protocol into a subroute screen. use as reference the openapi.json file as api. 
+the user can change the name, startHour, endHour, idealLightIntensity, idealExausterIntensity, idealBlowerIntensity, idealSoilHumidity,
+idealAirHumidity, idealTemperature, idealCo2, and the stage which is a selection box that retrieves the available stages from api.
 
+I can see the url changes when I click on edit buttom but the screen doesnt change
+
+include device as a selection box on top of tracking screen, this device id will be used as param to list trackins retrieved from api. use openapi.json if you will.
+
+
+ ____ DEPLOY _____
 ssh auto-grow-api
 
 ### Bare Repo ###

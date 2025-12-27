@@ -102,7 +102,10 @@ class ApiClient {
 		});
 	}
 
-	async updateDevice(id: string, data: { name?: string; status?: string; stageId?: number }) {
+	async updateDevice(
+		id: string,
+		data: { name?: string; status?: string; stageId?: number },
+	) {
 		return this.request<Device>(`/api/devices/${id}`, {
 			method: "PUT",
 			body: JSON.stringify(data),
@@ -160,7 +163,20 @@ class ApiClient {
 
 	async updateProtocol(
 		id: string,
-		data: { name?: string; stageId?: number; delay?: number },
+		data: {
+			name?: string;
+			stageId?: number;
+			delay?: number;
+			startHour?: number;
+			endHour?: number;
+			idealLightIntensity?: number;
+			idealExausterIntensity?: number;
+			idealBlowerIntensity?: number;
+			idealSoilHumidity?: number;
+			idealAirHumidity?: number;
+			idealTemperature?: number;
+			idealCo2?: number;
+		},
 	) {
 		return this.request<Protocol>(`/api/protocols/${id}`, {
 			method: "PUT",
@@ -245,8 +261,18 @@ export interface Protocol {
 	name: string;
 	stageId: number;
 	delay: number;
+	startHour?: number;
+	endHour?: number;
+	idealLightIntensity?: number;
+	idealExausterIntensity?: number;
+	idealBlowerIntensity?: number;
+	idealSoilHumidity?: number;
+	idealAirHumidity?: number;
+	idealTemperature?: number;
+	idealCo2?: number;
 	createdAt?: string;
 	updatedAt?: string;
+	stage?: Stage;
 }
 
 export interface Tracking {
