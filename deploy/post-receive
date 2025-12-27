@@ -29,7 +29,7 @@ do
     echo "✅ Restarting Server..."
 
     pm2 delete auto-grow-ui
-    pm2 start "PORT=8080 bun /var/www/auto-grow-ui/dist/index.html" --name auto-grow-ui
+    pm2 start "PORT=8080 HOST=0.0.0.0 bun /var/www/auto-grow-ui/dist/index.html" --name auto-grow-ui
     pm2 save 
 
     echo "🚀 Deployed Sucessfully..." 
