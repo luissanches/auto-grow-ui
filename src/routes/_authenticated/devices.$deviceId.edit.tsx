@@ -24,7 +24,7 @@ function EditDeviceComponent() {
 
 	useEffect(() => {
 		loadData();
-	}, [deviceId]);
+	}, []);
 
 	const loadData = useEffectEvent(async () => {
 		try {
@@ -38,6 +38,7 @@ function EditDeviceComponent() {
 			setStages(stagesData);
 			setName(deviceData.name);
 			setStageId(deviceData.stage?.id || null);
+
 			setError(null);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Failed to load data");
@@ -134,7 +135,9 @@ function EditDeviceComponent() {
 							<select
 								id="stage"
 								value={stageId || ""}
-								onChange={(e) => setStageId(e.target.value ? Number(e.target.value) : null)}
+								onChange={(e) => {
+									setStageId(e.target.value ? Number(e.target.value) : null);
+								}}
 								disabled={isSaving}
 								className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 							>

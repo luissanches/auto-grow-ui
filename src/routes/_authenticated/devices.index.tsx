@@ -37,19 +37,7 @@ function DevicesComponent() {
 		} finally {
 			setIsLoading(false);
 		}
-	})
-
-	const handleDelete = async (id: number) => {
-		if (!confirm("Are you sure you want to delete this device?")) {
-			return
-		}
-		try {
-			await apiClient.deleteDevice(id.toString());
-			loadDevices();
-		} catch (err) {
-			setError(err instanceof Error ? err.message : "Failed to delete device");
-		}
-	}
+	});
 
 	return (
 		<div className="container mx-auto px-4 py-8">
@@ -88,16 +76,11 @@ function DevicesComponent() {
 												<Button
 													variant="outline"
 													size="sm"
-													onClick={() => navigate({ to: `/devices/${device.id}/edit` })}
+													onClick={() =>
+														navigate({ to: `/devices/${device.id}/edit` })
+													}
 												>
 													Edit
-												</Button>
-												<Button
-													variant="destructive"
-													size="sm"
-													onClick={() => handleDelete(device.id)}
-												>
-													Delete
 												</Button>
 											</div>
 										</TableCell>
@@ -109,5 +92,5 @@ function DevicesComponent() {
 				</CardContent>
 			</Card>
 		</div>
-	)
+	);
 }
