@@ -18,6 +18,32 @@ I can see the url changes when I click on edit buttom but the screen doesnt chan
 
 include device as a selection box on top of tracking screen, this device id will be used as param to list trackins retrieved from api. use openapi.json if you will.
 
+include a selection box called history beside to device selection box on tracking screen. 
+this history selection box has today, week, month, quarter, semester, and year. The selected value will be used as a parameter
+to the api /api/trackings/device/1/history/today.
+
+include a button to a tracking record to see details it will open a subroute screen. the subroute will show the tracking properties.
+
+include a session called Protocol similarly you done for Sensor Readings but using protocol properties such as name, startHour,
+endHour, idealLightIntensity, idealTemperature, idealAirHumidity, idealSoilHumidity, idealExausterIntensity, idealBlowerIntensity, idealCo2, stage name
+
+ "id": 1,
+        "name": "Germination Protocol - Day",
+        "stageId": 1,
+        "startHour": 6,
+        "endHour": 18,
+        "idealLightIntensity": 40,
+        "idealExausterIntensity": 30,
+        "idealBlowerIntensity": 30,
+        "idealSoilHumidity": 70,
+        "idealAirHumidity": 74,
+        "idealTemperature": 26,
+        "idealCo2": 400,
+        "stage": {
+            "id": 1,
+            "name": "Germination"
+        }
+
 
  ____ DEPLOY _____
 ssh auto-grow-api

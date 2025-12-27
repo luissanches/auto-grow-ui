@@ -202,6 +202,12 @@ class ApiClient {
 		return this.request<Tracking[]>(`/api/trackings/device/${deviceId}`);
 	}
 
+	async getTrackingsByDeviceHistory(deviceId: string, history: string) {
+		return this.request<Tracking[]>(
+			`/api/trackings/device/${deviceId}/history/${history}`,
+		);
+	}
+
 	async createTracking(data: {
 		deviceId: number;
 		temperature: number;
@@ -287,5 +293,5 @@ export interface Tracking {
 	ppfd: number;
 	humidity: number;
 	createdAt: string;
-	updatedAt: string;
+	protocol?: Protocol;
 }

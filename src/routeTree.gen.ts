@@ -17,8 +17,10 @@ import { Route as AuthenticatedStagesRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedProtocolsRouteImport } from './routes/_authenticated/protocols'
 import { Route as AuthenticatedDevicesRouteImport } from './routes/_authenticated/devices'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedTrackingIndexRouteImport } from './routes/_authenticated/tracking.index'
 import { Route as AuthenticatedProtocolsIndexRouteImport } from './routes/_authenticated/protocols.index'
 import { Route as AuthenticatedDevicesIndexRouteImport } from './routes/_authenticated/devices.index'
+import { Route as AuthenticatedTrackingTrackingIdRouteImport } from './routes/_authenticated/tracking.$trackingId'
 import { Route as AuthenticatedProtocolsProtocolIdEditRouteImport } from './routes/_authenticated/protocols.$protocolId.edit'
 import { Route as AuthenticatedDevicesDeviceIdEditRouteImport } from './routes/_authenticated/devices.$deviceId.edit'
 
@@ -61,6 +63,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedTrackingIndexRoute =
+  AuthenticatedTrackingIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedTrackingRoute,
+  } as any)
 const AuthenticatedProtocolsIndexRoute =
   AuthenticatedProtocolsIndexRouteImport.update({
     id: '/',
@@ -72,6 +80,12 @@ const AuthenticatedDevicesIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedDevicesRoute,
+  } as any)
+const AuthenticatedTrackingTrackingIdRoute =
+  AuthenticatedTrackingTrackingIdRouteImport.update({
+    id: '/$trackingId',
+    path: '/$trackingId',
+    getParentRoute: () => AuthenticatedTrackingRoute,
   } as any)
 const AuthenticatedProtocolsProtocolIdEditRoute =
   AuthenticatedProtocolsProtocolIdEditRouteImport.update({
@@ -93,9 +107,11 @@ export interface FileRoutesByFullPath {
   '/devices': typeof AuthenticatedDevicesRouteWithChildren
   '/protocols': typeof AuthenticatedProtocolsRouteWithChildren
   '/stages': typeof AuthenticatedStagesRoute
-  '/tracking': typeof AuthenticatedTrackingRoute
+  '/tracking': typeof AuthenticatedTrackingRouteWithChildren
+  '/tracking/$trackingId': typeof AuthenticatedTrackingTrackingIdRoute
   '/devices/': typeof AuthenticatedDevicesIndexRoute
   '/protocols/': typeof AuthenticatedProtocolsIndexRoute
+  '/tracking/': typeof AuthenticatedTrackingIndexRoute
   '/devices/$deviceId/edit': typeof AuthenticatedDevicesDeviceIdEditRoute
   '/protocols/$protocolId/edit': typeof AuthenticatedProtocolsProtocolIdEditRoute
 }
@@ -104,9 +120,10 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/stages': typeof AuthenticatedStagesRoute
-  '/tracking': typeof AuthenticatedTrackingRoute
+  '/tracking/$trackingId': typeof AuthenticatedTrackingTrackingIdRoute
   '/devices': typeof AuthenticatedDevicesIndexRoute
   '/protocols': typeof AuthenticatedProtocolsIndexRoute
+  '/tracking': typeof AuthenticatedTrackingIndexRoute
   '/devices/$deviceId/edit': typeof AuthenticatedDevicesDeviceIdEditRoute
   '/protocols/$protocolId/edit': typeof AuthenticatedProtocolsProtocolIdEditRoute
 }
@@ -119,9 +136,11 @@ export interface FileRoutesById {
   '/_authenticated/devices': typeof AuthenticatedDevicesRouteWithChildren
   '/_authenticated/protocols': typeof AuthenticatedProtocolsRouteWithChildren
   '/_authenticated/stages': typeof AuthenticatedStagesRoute
-  '/_authenticated/tracking': typeof AuthenticatedTrackingRoute
+  '/_authenticated/tracking': typeof AuthenticatedTrackingRouteWithChildren
+  '/_authenticated/tracking/$trackingId': typeof AuthenticatedTrackingTrackingIdRoute
   '/_authenticated/devices/': typeof AuthenticatedDevicesIndexRoute
   '/_authenticated/protocols/': typeof AuthenticatedProtocolsIndexRoute
+  '/_authenticated/tracking/': typeof AuthenticatedTrackingIndexRoute
   '/_authenticated/devices/$deviceId/edit': typeof AuthenticatedDevicesDeviceIdEditRoute
   '/_authenticated/protocols/$protocolId/edit': typeof AuthenticatedProtocolsProtocolIdEditRoute
 }
@@ -135,8 +154,10 @@ export interface FileRouteTypes {
     | '/protocols'
     | '/stages'
     | '/tracking'
+    | '/tracking/$trackingId'
     | '/devices/'
     | '/protocols/'
+    | '/tracking/'
     | '/devices/$deviceId/edit'
     | '/protocols/$protocolId/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -145,9 +166,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/dashboard'
     | '/stages'
-    | '/tracking'
+    | '/tracking/$trackingId'
     | '/devices'
     | '/protocols'
+    | '/tracking'
     | '/devices/$deviceId/edit'
     | '/protocols/$protocolId/edit'
   id:
@@ -160,8 +182,10 @@ export interface FileRouteTypes {
     | '/_authenticated/protocols'
     | '/_authenticated/stages'
     | '/_authenticated/tracking'
+    | '/_authenticated/tracking/$trackingId'
     | '/_authenticated/devices/'
     | '/_authenticated/protocols/'
+    | '/_authenticated/tracking/'
     | '/_authenticated/devices/$deviceId/edit'
     | '/_authenticated/protocols/$protocolId/edit'
   fileRoutesById: FileRoutesById
@@ -230,6 +254,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/tracking/': {
+      id: '/_authenticated/tracking/'
+      path: '/'
+      fullPath: '/tracking/'
+      preLoaderRoute: typeof AuthenticatedTrackingIndexRouteImport
+      parentRoute: typeof AuthenticatedTrackingRoute
+    }
     '/_authenticated/protocols/': {
       id: '/_authenticated/protocols/'
       path: '/'
@@ -243,6 +274,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/devices/'
       preLoaderRoute: typeof AuthenticatedDevicesIndexRouteImport
       parentRoute: typeof AuthenticatedDevicesRoute
+    }
+    '/_authenticated/tracking/$trackingId': {
+      id: '/_authenticated/tracking/$trackingId'
+      path: '/$trackingId'
+      fullPath: '/tracking/$trackingId'
+      preLoaderRoute: typeof AuthenticatedTrackingTrackingIdRouteImport
+      parentRoute: typeof AuthenticatedTrackingRoute
     }
     '/_authenticated/protocols/$protocolId/edit': {
       id: '/_authenticated/protocols/$protocolId/edit'
@@ -291,12 +329,27 @@ const AuthenticatedProtocolsRouteWithChildren =
     AuthenticatedProtocolsRouteChildren,
   )
 
+interface AuthenticatedTrackingRouteChildren {
+  AuthenticatedTrackingTrackingIdRoute: typeof AuthenticatedTrackingTrackingIdRoute
+  AuthenticatedTrackingIndexRoute: typeof AuthenticatedTrackingIndexRoute
+}
+
+const AuthenticatedTrackingRouteChildren: AuthenticatedTrackingRouteChildren = {
+  AuthenticatedTrackingTrackingIdRoute: AuthenticatedTrackingTrackingIdRoute,
+  AuthenticatedTrackingIndexRoute: AuthenticatedTrackingIndexRoute,
+}
+
+const AuthenticatedTrackingRouteWithChildren =
+  AuthenticatedTrackingRoute._addFileChildren(
+    AuthenticatedTrackingRouteChildren,
+  )
+
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDevicesRoute: typeof AuthenticatedDevicesRouteWithChildren
   AuthenticatedProtocolsRoute: typeof AuthenticatedProtocolsRouteWithChildren
   AuthenticatedStagesRoute: typeof AuthenticatedStagesRoute
-  AuthenticatedTrackingRoute: typeof AuthenticatedTrackingRoute
+  AuthenticatedTrackingRoute: typeof AuthenticatedTrackingRouteWithChildren
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -304,7 +357,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDevicesRoute: AuthenticatedDevicesRouteWithChildren,
   AuthenticatedProtocolsRoute: AuthenticatedProtocolsRouteWithChildren,
   AuthenticatedStagesRoute: AuthenticatedStagesRoute,
-  AuthenticatedTrackingRoute: AuthenticatedTrackingRoute,
+  AuthenticatedTrackingRoute: AuthenticatedTrackingRouteWithChildren,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
