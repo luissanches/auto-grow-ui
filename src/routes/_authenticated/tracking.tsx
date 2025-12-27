@@ -8,7 +8,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { apiClient, type Tracking } from "@/lib/api";
+import { apiClient, type Device, type Tracking } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useEffectEvent, useState } from "react";
@@ -19,17 +19,43 @@ export const Route = createFileRoute("/_authenticated/tracking")({
 
 function TrackingComponent() {
 	const [trackings, setTrackings] = useState<Tracking[]>([]);
+	const [devices, setDevices] = useState<Device[]>([]);
+	const [selectedDeviceId, setSelectedDeviceId] = useState<string>("");
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
-		loadTrackings();
+		loadDevices();
 	}, []);
 
-	const loadTrackings = useEffectEvent(async () => {
+	useEffect(() => {
+		if (selectedDeviceId) {
+			loadTrackings();
+		}
+	}, [selectedDeviceId]);
+
+	const loadDevices = useEffectEvent(async () => {
 		try {
 			setIsLoading(true);
-			const data = await apiClient.getTrackings();
+			const data = await apiClient.getDevices();
+			setDevices(data);
+			if (data.length > 0) {
+				setSelectedDeviceId(data[0].id.toString());
+			}
+			setError(null);
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "Failed to load devices");
+		} finally {
+			setIsLoading(false);
+		}
+	});
+
+	const loadTrackings = useEffectEvent(async () => {
+		if (!selectedDeviceId) return;
+
+		try {
+			setIsLoading(true);
+			const data = await apiClient.getTrackingsByDevice(selectedDeviceId);
 			setTrackings(data);
 			setError(null);
 		} catch (err) {
@@ -63,11 +89,44 @@ function TrackingComponent() {
 					</div>
 				</CardHeader>
 				<CardContent>
+					<div className="mb-6">
+						<label htmlFor="device" className="text-sm font-medium block mb-2">
+							Select Device
+						</label>
+						<select
+							id="device"
+							value={selectedDeviceId}
+							onChange={(e) => setSelectedDeviceId(e.target.value)}
+							disabled={isLoading || devices.length === 0}
+							className="flex h-10 w-full max-w-md rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							{devices.length === 0 ? (
+								<option value="">No devices available</option>
+							) : (
+								devices.map((device) => (
+									<option key={device.id} value={device.id}>
+										{device.name}
+									</option>
+								))
+							)}
+						</select>
+					</div>
+
 					{isLoading && <p>Loading...</p>}
 					{error && <p className="text-destructive">{error}</p>}
-					{!isLoading && !error && trackings.length === 0 && (
-						<p className="text-muted-foreground">No tracking records found</p>
+					{!isLoading && !error && !selectedDeviceId && (
+						<p className="text-muted-foreground">
+							Please select a device to view tracking records
+						</p>
 					)}
+					{!isLoading &&
+						!error &&
+						selectedDeviceId &&
+						trackings.length === 0 && (
+							<p className="text-muted-foreground">
+								No tracking records found for this device
+							</p>
+						)}
 					{!isLoading && !error && trackings.length > 0 && (
 						<Table>
 							<TableHeader>
