@@ -228,8 +228,9 @@ export interface Device {
 	id: number;
 	name: string;
 	status: string;
-	createdAt?: string;
-	updatedAt?: string;
+	createdAt: string;
+	updatedAt: string;
+	stage?: Stage;
 }
 
 export interface Stage {
@@ -251,13 +252,14 @@ export interface Protocol {
 export interface Tracking {
 	id: number;
 	deviceId: number;
-	protocolId?: number;
+	device: Device;
+	protocolId: number;
 	temperature: number;
-	airHumidity?: number;
-	soilHumidity?: number;
-	co2?: number;
-	ppfd?: number;
-	humidity?: number;
-	createdAt?: string;
-	updatedAt?: string;
+	airHumidity: number;
+	soilHumidity: number;
+	co2: number;
+	ppfd: number;
+	humidity: number;
+	createdAt: string;
+	updatedAt: string;
 }

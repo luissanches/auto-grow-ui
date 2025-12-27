@@ -1,6 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { apiClient, type Device } from "@/lib/api";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Table,
@@ -10,7 +8,9 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+import { apiClient, type Device } from "@/lib/api";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useEffectEvent, useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/devices")({
 	component: DevicesComponent,
@@ -25,7 +25,7 @@ function DevicesComponent() {
 		loadDevices();
 	}, []);
 
-	const loadDevices = async () => {
+	const loadDevices = useEffectEvent(async () => {
 		try {
 			setIsLoading(true);
 			const data = await apiClient.getDevices();
@@ -36,7 +36,7 @@ function DevicesComponent() {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	});
 
 	const handleDelete = async (id: number) => {
 		if (!confirm("Are you sure you want to delete this device?")) {
@@ -56,7 +56,6 @@ function DevicesComponent() {
 				<CardHeader>
 					<div className="flex items-center justify-between">
 						<CardTitle>Devices</CardTitle>
-						<Button>Add Device</Button>
 					</div>
 				</CardHeader>
 				<CardContent>
@@ -72,6 +71,7 @@ function DevicesComponent() {
 									<TableHead>ID</TableHead>
 									<TableHead>Name</TableHead>
 									<TableHead>Status</TableHead>
+									<TableHead>Stage</TableHead>
 									<TableHead>Actions</TableHead>
 								</TableRow>
 							</TableHeader>
@@ -81,6 +81,7 @@ function DevicesComponent() {
 										<TableCell>{device.id}</TableCell>
 										<TableCell>{device.name}</TableCell>
 										<TableCell>{device.status}</TableCell>
+										<TableCell>{device.stage?.name}</TableCell>
 										<TableCell>
 											<Button
 												variant="destructive"

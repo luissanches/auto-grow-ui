@@ -1,6 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { apiClient, type Tracking } from "@/lib/api";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Table,
@@ -10,7 +8,10 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+import { apiClient, type Tracking } from "@/lib/api";
+import { formatDate } from "@/lib/utils";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useEffectEvent, useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/tracking")({
 	component: TrackingComponent,
@@ -25,7 +26,7 @@ function TrackingComponent() {
 		loadTrackings();
 	}, []);
 
-	const loadTrackings = async () => {
+	const loadTrackings = useEffectEvent(async () => {
 		try {
 			setIsLoading(true);
 			const data = await apiClient.getTrackings();
@@ -36,7 +37,7 @@ function TrackingComponent() {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	});
 
 	const handleDelete = async (id: number) => {
 		if (!confirm("Are you sure you want to delete this tracking record?")) {
@@ -71,26 +72,26 @@ function TrackingComponent() {
 						<Table>
 							<TableHeader>
 								<TableRow>
-									<TableHead>ID</TableHead>
-									<TableHead>Device ID</TableHead>
+									<TableHead>Device</TableHead>
 									<TableHead>Temperature</TableHead>
 									<TableHead>Air Humidity</TableHead>
 									<TableHead>Soil Humidity</TableHead>
 									<TableHead>CO2</TableHead>
 									<TableHead>PPFD</TableHead>
+									<TableHead>Created</TableHead>
 									<TableHead>Actions</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
 								{trackings.map((tracking) => (
 									<TableRow key={tracking.id}>
-										<TableCell>{tracking.id}</TableCell>
-										<TableCell>{tracking.deviceId}</TableCell>
+										<TableCell>{tracking.device.name}</TableCell>
 										<TableCell>{tracking.temperature}°C</TableCell>
 										<TableCell>{tracking.airHumidity}%</TableCell>
 										<TableCell>{tracking.soilHumidity}%</TableCell>
 										<TableCell>{tracking.co2} ppm</TableCell>
 										<TableCell>{tracking.ppfd} µmol/m²/s</TableCell>
+										<TableCell>{formatDate(tracking.createdAt)}</TableCell>
 										<TableCell>
 											<Button
 												variant="destructive"

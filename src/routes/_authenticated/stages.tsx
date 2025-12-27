@@ -1,6 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { apiClient, type Stage } from "@/lib/api";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Table,
@@ -10,7 +8,9 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+import { apiClient, type Stage } from "@/lib/api";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useEffectEvent, useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/stages")({
 	component: StagesComponent,
@@ -25,7 +25,7 @@ function StagesComponent() {
 		loadStages();
 	}, []);
 
-	const loadStages = async () => {
+	const loadStages = useEffectEvent(async () => {
 		try {
 			setIsLoading(true);
 			const data = await apiClient.getStages();
@@ -36,7 +36,7 @@ function StagesComponent() {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	});
 
 	const handleDelete = async (id: number) => {
 		if (!confirm("Are you sure you want to delete this stage?")) {
@@ -56,7 +56,6 @@ function StagesComponent() {
 				<CardHeader>
 					<div className="flex items-center justify-between">
 						<CardTitle>Stages</CardTitle>
-						<Button>Add Stage</Button>
 					</div>
 				</CardHeader>
 				<CardContent>
