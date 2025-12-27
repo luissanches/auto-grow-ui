@@ -7,7 +7,7 @@ from the api as defined in aopenapi.json file.
 
 create an auth api that receive user and password and validate them against a env vars. after that configure login page request this new auth api.
 
-make modification on device screen to edit a device. use as reference the openapi.json file as api. 
+make modification on device screen to edit a device into a subroute screen. use as reference the openapi.json file as api. 
 the user can change the name and the stage which is a selection box that retrieves the available stages from api.
 
 

@@ -102,7 +102,7 @@ class ApiClient {
 		});
 	}
 
-	async updateDevice(id: string, data: { name?: string; status?: string }) {
+	async updateDevice(id: string, data: { name?: string; status?: string; stageId?: number }) {
 		return this.request<Device>(`/api/devices/${id}`, {
 			method: "PUT",
 			body: JSON.stringify(data),

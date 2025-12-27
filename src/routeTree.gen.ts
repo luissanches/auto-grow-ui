@@ -17,6 +17,8 @@ import { Route as AuthenticatedStagesRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedProtocolsRouteImport } from './routes/_authenticated/protocols'
 import { Route as AuthenticatedDevicesRouteImport } from './routes/_authenticated/devices'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDevicesIndexRouteImport } from './routes/_authenticated/devices.index'
+import { Route as AuthenticatedDevicesDeviceIdEditRouteImport } from './routes/_authenticated/devices.$deviceId.edit'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -57,24 +59,39 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDevicesIndexRoute =
+  AuthenticatedDevicesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDevicesRoute,
+  } as any)
+const AuthenticatedDevicesDeviceIdEditRoute =
+  AuthenticatedDevicesDeviceIdEditRouteImport.update({
+    id: '/$deviceId/edit',
+    path: '/$deviceId/edit',
+    getParentRoute: () => AuthenticatedDevicesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/devices': typeof AuthenticatedDevicesRoute
+  '/devices': typeof AuthenticatedDevicesRouteWithChildren
   '/protocols': typeof AuthenticatedProtocolsRoute
   '/stages': typeof AuthenticatedStagesRoute
   '/tracking': typeof AuthenticatedTrackingRoute
+  '/devices/': typeof AuthenticatedDevicesIndexRoute
+  '/devices/$deviceId/edit': typeof AuthenticatedDevicesDeviceIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/devices': typeof AuthenticatedDevicesRoute
   '/protocols': typeof AuthenticatedProtocolsRoute
   '/stages': typeof AuthenticatedStagesRoute
   '/tracking': typeof AuthenticatedTrackingRoute
+  '/devices': typeof AuthenticatedDevicesIndexRoute
+  '/devices/$deviceId/edit': typeof AuthenticatedDevicesDeviceIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -82,10 +99,12 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/devices': typeof AuthenticatedDevicesRoute
+  '/_authenticated/devices': typeof AuthenticatedDevicesRouteWithChildren
   '/_authenticated/protocols': typeof AuthenticatedProtocolsRoute
   '/_authenticated/stages': typeof AuthenticatedStagesRoute
   '/_authenticated/tracking': typeof AuthenticatedTrackingRoute
+  '/_authenticated/devices/': typeof AuthenticatedDevicesIndexRoute
+  '/_authenticated/devices/$deviceId/edit': typeof AuthenticatedDevicesDeviceIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,15 +116,18 @@ export interface FileRouteTypes {
     | '/protocols'
     | '/stages'
     | '/tracking'
+    | '/devices/'
+    | '/devices/$deviceId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/dashboard'
-    | '/devices'
     | '/protocols'
     | '/stages'
     | '/tracking'
+    | '/devices'
+    | '/devices/$deviceId/edit'
   id:
     | '__root__'
     | '/'
@@ -116,6 +138,8 @@ export interface FileRouteTypes {
     | '/_authenticated/protocols'
     | '/_authenticated/stages'
     | '/_authenticated/tracking'
+    | '/_authenticated/devices/'
+    | '/_authenticated/devices/$deviceId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -182,12 +206,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/devices/': {
+      id: '/_authenticated/devices/'
+      path: '/'
+      fullPath: '/devices/'
+      preLoaderRoute: typeof AuthenticatedDevicesIndexRouteImport
+      parentRoute: typeof AuthenticatedDevicesRoute
+    }
+    '/_authenticated/devices/$deviceId/edit': {
+      id: '/_authenticated/devices/$deviceId/edit'
+      path: '/$deviceId/edit'
+      fullPath: '/devices/$deviceId/edit'
+      preLoaderRoute: typeof AuthenticatedDevicesDeviceIdEditRouteImport
+      parentRoute: typeof AuthenticatedDevicesRoute
+    }
   }
 }
 
+interface AuthenticatedDevicesRouteChildren {
+  AuthenticatedDevicesIndexRoute: typeof AuthenticatedDevicesIndexRoute
+  AuthenticatedDevicesDeviceIdEditRoute: typeof AuthenticatedDevicesDeviceIdEditRoute
+}
+
+const AuthenticatedDevicesRouteChildren: AuthenticatedDevicesRouteChildren = {
+  AuthenticatedDevicesIndexRoute: AuthenticatedDevicesIndexRoute,
+  AuthenticatedDevicesDeviceIdEditRoute: AuthenticatedDevicesDeviceIdEditRoute,
+}
+
+const AuthenticatedDevicesRouteWithChildren =
+  AuthenticatedDevicesRoute._addFileChildren(AuthenticatedDevicesRouteChildren)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedDevicesRoute: typeof AuthenticatedDevicesRoute
+  AuthenticatedDevicesRoute: typeof AuthenticatedDevicesRouteWithChildren
   AuthenticatedProtocolsRoute: typeof AuthenticatedProtocolsRoute
   AuthenticatedStagesRoute: typeof AuthenticatedStagesRoute
   AuthenticatedTrackingRoute: typeof AuthenticatedTrackingRoute
@@ -195,7 +246,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedDevicesRoute: AuthenticatedDevicesRoute,
+  AuthenticatedDevicesRoute: AuthenticatedDevicesRouteWithChildren,
   AuthenticatedProtocolsRoute: AuthenticatedProtocolsRoute,
   AuthenticatedStagesRoute: AuthenticatedStagesRoute,
   AuthenticatedTrackingRoute: AuthenticatedTrackingRoute,
