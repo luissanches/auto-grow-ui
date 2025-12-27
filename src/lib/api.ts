@@ -1,4 +1,4 @@
-const API_BASE_URL = Bun.env.VITE_API_BASE_URL || "http://localhost:3000";
+const API_BASE_URL = process.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 class ApiClient {
 	private credentials: { username: string; password: string } | null = null;
