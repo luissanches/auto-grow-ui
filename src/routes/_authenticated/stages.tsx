@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Table,
@@ -38,18 +37,6 @@ function StagesComponent() {
 		}
 	});
 
-	const handleDelete = async (id: number) => {
-		if (!confirm("Are you sure you want to delete this stage?")) {
-			return;
-		}
-		try {
-			await apiClient.deleteStage(id.toString());
-			loadStages();
-		} catch (err) {
-			setError(err instanceof Error ? err.message : "Failed to delete stage");
-		}
-	};
-
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<Card>
@@ -70,7 +57,6 @@ function StagesComponent() {
 								<TableRow>
 									<TableHead>ID</TableHead>
 									<TableHead>Name</TableHead>
-									<TableHead>Actions</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
@@ -78,15 +64,6 @@ function StagesComponent() {
 									<TableRow key={stage.id}>
 										<TableCell>{stage.id}</TableCell>
 										<TableCell>{stage.name}</TableCell>
-										<TableCell>
-											<Button
-												variant="destructive"
-												size="sm"
-												onClick={() => handleDelete(stage.id)}
-											>
-												Delete
-											</Button>
-										</TableCell>
 									</TableRow>
 								))}
 							</TableBody>
