@@ -356,7 +356,7 @@ function TrackingDetailsComponent() {
 											</CardHeader>
 											<CardContent>
 												<div className="text-2xl font-bold">
-													{tracking.protocol.idealExausterIntensity}
+													{tracking.protocol.idealExausterIntensity}%
 												</div>
 											</CardContent>
 										</Card>
@@ -371,7 +371,7 @@ function TrackingDetailsComponent() {
 											</CardHeader>
 											<CardContent>
 												<div className="text-2xl font-bold">
-													{tracking.protocol.idealBlowerIntensity}
+													{tracking.protocol.idealBlowerIntensity}%
 												</div>
 											</CardContent>
 										</Card>
@@ -387,6 +387,148 @@ function TrackingDetailsComponent() {
 											<CardContent>
 												<div className="text-2xl font-bold">
 													{tracking.protocol.idealCo2} ppm
+												</div>
+											</CardContent>
+										</Card>
+									)}
+								</div>
+							</div>
+						)}
+
+						{tracking && (
+							<div>
+								<h3 className="text-lg font-semibold mb-4">Reply Action</h3>
+								<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+									{tracking.turnLightIntensity !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Turn Light Intensity
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.turnLightIntensity}%
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.turnExausterIntensity !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Turn Exauster Intensity
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.turnExausterIntensity}%
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.turnBlowerIntensity !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Turn Blower Intensity
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.turnBlowerIntensity}%
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.turnACOn !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Turn AC On
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.turnACOn ? "Yes" : "No"}
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.turnWaterOn !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Turn Water On
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.turnWaterOn ? "Yes" : "No"}
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.turnFan1On !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Turn Fan 1 On
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.turnFan1On ? "Yes" : "No"}
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.turnFan2On !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Turn Fan 2 On
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.turnFan2On ? "Yes" : "No"}
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.turnHumidifierOn !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Turn Humidifier On
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.turnHumidifierOn ? "Yes" : "No"}
+												</div>
+											</CardContent>
+										</Card>
+									)}
+
+									{tracking.turnDehumidifierOn !== undefined && (
+										<Card>
+											<CardHeader className="pb-3">
+												<CardTitle className="text-sm font-medium text-muted-foreground">
+													Turn Dehumidifier On
+												</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<div className="text-2xl font-bold">
+													{tracking.turnDehumidifierOn ? "Yes" : "No"}
 												</div>
 											</CardContent>
 										</Card>

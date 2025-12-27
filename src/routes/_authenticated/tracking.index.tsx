@@ -50,7 +50,7 @@ function TrackingComponent() {
 		} finally {
 			setIsLoading(false);
 		}
-	})
+	});
 
 	const loadTrackings = useEffectEvent(async () => {
 		if (!selectedDeviceId) return;
@@ -60,7 +60,7 @@ function TrackingComponent() {
 			const data = await apiClient.getTrackingsByDeviceHistory(
 				selectedDeviceId,
 				selectedHistory,
-			)
+			);
 			setTrackings(data);
 			setError(null);
 		} catch (err) {
@@ -68,21 +68,7 @@ function TrackingComponent() {
 		} finally {
 			setIsLoading(false);
 		}
-	})
-
-	const handleDelete = async (id: number) => {
-		if (!confirm("Are you sure you want to delete this tracking record?")) {
-			return
-		}
-		try {
-			await apiClient.deleteTracking(id.toString());
-			loadTrackings();
-		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : "Failed to delete tracking",
-			)
-		}
-	}
+	});
 
 	return (
 		<div className="container mx-auto px-4 py-8">
@@ -166,7 +152,7 @@ function TrackingComponent() {
 									<TableHead>Air Humidity</TableHead>
 									<TableHead>Soil Humidity</TableHead>
 									<TableHead>CO2</TableHead>
-									<TableHead>PPFD</TableHead>
+									<TableHead>Lux</TableHead>
 									<TableHead>Created</TableHead>
 									<TableHead>Actions</TableHead>
 								</TableRow>
@@ -174,12 +160,11 @@ function TrackingComponent() {
 							<TableBody>
 								{trackings.map((tracking) => (
 									<TableRow key={tracking.id}>
-										<TableCell>{tracking.device.name}</TableCell>
 										<TableCell>{tracking.temperature}°C</TableCell>
 										<TableCell>{tracking.airHumidity}%</TableCell>
 										<TableCell>{tracking.soilHumidity}%</TableCell>
 										<TableCell>{tracking.co2} ppm</TableCell>
-										<TableCell>{tracking.ppfd} µmol/m²/s</TableCell>
+										<TableCell>{tracking.lux}</TableCell>
 										<TableCell>{formatDate(tracking.createdAt)}</TableCell>
 										<TableCell>
 											<div className="flex gap-2">
@@ -195,13 +180,6 @@ function TrackingComponent() {
 												>
 													View Details
 												</Button>
-												<Button
-													variant="destructive"
-													size="sm"
-													onClick={() => handleDelete(tracking.id)}
-												>
-													Delete
-												</Button>
 											</div>
 										</TableCell>
 									</TableRow>
@@ -212,5 +190,5 @@ function TrackingComponent() {
 				</CardContent>
 			</Card>
 		</div>
-	)
+	);
 }

@@ -292,6 +292,15 @@ export interface Tracking {
 	co2: number;
 	lux: number;
 	humidity: number;
+	turnLightIntensity?: number;
+	turnExausterIntensity?: number;
+	turnBlowerIntensity?: number;
+	turnACOn?: number;
+	turnWaterOn?: boolean;
+	turnFan1On?: boolean;
+	turnFan2On?: boolean;
+	turnHumidifierOn?: boolean;
+	turnDehumidifierOn?: boolean;
 	createdAt: string;
 	protocol?: Protocol;
 }
