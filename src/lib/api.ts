@@ -208,6 +208,10 @@ class ApiClient {
 		);
 	}
 
+	async getLatestTracking(deviceId: string) {
+		return this.request<Tracking>(`/api/trackings/device/${deviceId}/latest`);
+	}
+
 	async createTracking(data: {
 		deviceId: number;
 		temperature: number;

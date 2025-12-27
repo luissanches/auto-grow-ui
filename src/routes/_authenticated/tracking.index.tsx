@@ -123,8 +123,6 @@ function TrackingComponent() {
 								<option value="week">Week</option>
 								<option value="month">Month</option>
 								<option value="quarter">Quarter</option>
-								<option value="semester">Semester</option>
-								<option value="year">Year</option>
 							</select>
 						</div>
 					</div>

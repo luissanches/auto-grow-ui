@@ -30,6 +30,10 @@ endHour, idealLightIntensity, idealTemperature, idealAirHumidity, idealSoilHumid
 include a session called Reply Action similarly you done for Sensor Readings after Protocol session but using protocol properties such as turnLightIntensity,
 turnExausterIntensity, turnBlowerIntensity, turnACTemperature, turnWaterOn, turnFan1On, turnFan2On, turnHumidifierOn, and turnDehumidifierOn. Please, pretify the labels based on camel case properties
 
+include device as a selection box on top of dashboard screen, this device id will be used as param to retriave the latest trackin retrieved from api api/trackings/device/1/latest. use openapi.json if you will.
+based on latest tracking retrivied create a top session with  device name, stage name from device. and also a main session for Sensor Readings 
+with temperature, airHumidity, lux, soilHumidity, co2, and createdAt.
+and also create a session with turnACOn, turnLightIntensity, turnHumidifierOn, turnDehumidifierOn, turnFan1On, turnFan2On, turnExausterIntensity, turnBlowerIntensity, turnWaterOn
 
 
 
