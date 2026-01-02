@@ -78,7 +78,7 @@ function NewActionComponent() {
 			setIsSaving(true);
 			setError(null);
 
-			await apiClient.createCustomAction({
+			await apiClient.createAction({
 				deviceId,
 				turnLightIntensity,
 				turnExausterIntensity,
@@ -96,9 +96,7 @@ function NewActionComponent() {
 
 			navigate({ to: "/actions" });
 		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : "Failed to create custom action",
-			);
+			setError(err instanceof Error ? err.message : "Failed to create action");
 		} finally {
 			setIsSaving(false);
 		}
@@ -127,7 +125,7 @@ function NewActionComponent() {
 					<CardContent className="pt-6">
 						<p className="text-destructive">{error}</p>
 						<Button onClick={handleCancel} className="mt-4">
-							Back to Custom Actions
+							Back to Actions
 						</Button>
 					</CardContent>
 				</Card>
@@ -139,7 +137,7 @@ function NewActionComponent() {
 		<div className="container mx-auto px-4 py-8">
 			<Card>
 				<CardHeader>
-					<CardTitle>Create New Custom Action</CardTitle>
+					<CardTitle>Create New Action</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<form onSubmit={handleSave} className="space-y-6">
@@ -193,7 +191,9 @@ function NewActionComponent() {
 
 						{/* Section 2: Intensity Controls */}
 						<div className="space-y-4">
-							<h3 className="text-lg font-medium">Intensity Controls (0-100)</h3>
+							<h3 className="text-lg font-medium">
+								Intensity Controls (0-100)
+							</h3>
 
 							<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 								<div className="space-y-2">
@@ -407,7 +407,7 @@ function NewActionComponent() {
 						{/* Form Actions */}
 						<div className="flex gap-2 pt-4">
 							<Button type="submit" disabled={isSaving}>
-								{isSaving ? "Creating..." : "Create Custom Action"}
+								{isSaving ? "Creating..." : "Create Action"}
 							</Button>
 							<Button
 								type="button"

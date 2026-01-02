@@ -9,7 +9,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { apiClient, type CustomAction, type Device } from "@/lib/api";
+import { apiClient, type Action, type Device } from "@/lib/api";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useEffectEvent, useState } from "react";
 
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/_authenticated/actions/")({
 
 function ActionsComponent() {
 	const navigate = useNavigate();
-	const [actions, setActions] = useState<CustomAction[]>([]);
+	const [actions, setActions] = useState<Action[]>([]);
 	const [devices, setDevices] = useState<Device[]>([]);
 	const [selectedDeviceId, setSelectedDeviceId] = useState<string>("all");
 	const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +34,7 @@ function ActionsComponent() {
 		try {
 			setIsLoading(true);
 			const [actionsData, devicesData] = await Promise.all([
-				apiClient.getCustomActions(),
+				apiClient.getActions(),
 				apiClient.getDevices(),
 			]);
 			setActions(actionsData);
@@ -50,7 +50,7 @@ function ActionsComponent() {
 	const handleDelete = async (actionId: number) => {
 		if (
 			!confirm(
-				"Are you sure you want to delete this custom action? This action cannot be undone.",
+				"Are you sure you want to delete this action? This action cannot be undone.",
 			)
 		) {
 			return;
@@ -60,14 +60,12 @@ function ActionsComponent() {
 			setDeletingActionId(actionId);
 			setError(null);
 
-			await apiClient.deleteCustomAction(actionId.toString());
+			await apiClient.deleteAction(actionId.toString());
 
 			// Remove the deleted action from the list
 			setActions(actions.filter((action) => action.id !== actionId));
 		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : "Failed to delete custom action",
-			);
+			setError(err instanceof Error ? err.message : "Failed to delete action");
 		} finally {
 			setDeletingActionId(null);
 		}
@@ -85,14 +83,14 @@ function ActionsComponent() {
 			<Card>
 				<CardHeader>
 					<div className="flex justify-between">
-						<CardTitle>Custom Actions</CardTitle>
+						<CardTitle>Actions</CardTitle>
 						<Button
 							className="cursor-pointer"
 							onClick={() => navigate({ to: "/actions/new" })}
 							disabled={isLoading}
 							variant="outline"
 						>
-							New Custom Action
+							New Action
 						</Button>
 					</div>
 				</CardHeader>
@@ -126,8 +124,8 @@ function ActionsComponent() {
 					{!isLoading && !error && filteredActions.length === 0 && (
 						<p className="text-muted-foreground">
 							{selectedDeviceId === "all"
-								? "No custom actions found"
-								: "No custom actions found for the selected device"}
+								? "No actions found"
+								: "No actions found for the selected device"}
 						</p>
 					)}
 					{!isLoading && !error && filteredActions.length > 0 && (

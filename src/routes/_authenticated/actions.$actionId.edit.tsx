@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { apiClient, type CustomAction, type Device } from "@/lib/api";
+import { apiClient, type Action, type Device } from "@/lib/api";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useEffectEvent, useState } from "react";
 
@@ -13,7 +13,7 @@ function EditActionComponent() {
 	const { actionId } = Route.useParams();
 	const navigate = useNavigate();
 
-	const [action, setAction] = useState<CustomAction | null>(null);
+	const [action, setAction] = useState<Action | null>(null);
 	const [devices, setDevices] = useState<Device[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -42,7 +42,7 @@ function EditActionComponent() {
 		try {
 			setIsLoading(true);
 			const [actionData, devicesData] = await Promise.all([
-				apiClient.getCustomAction(actionId),
+				apiClient.getAction(actionId),
 				apiClient.getDevices(),
 			]);
 
@@ -101,7 +101,7 @@ function EditActionComponent() {
 			setIsSaving(true);
 			setError(null);
 
-			await apiClient.updateCustomAction(actionId, {
+			await apiClient.updateAction(actionId, {
 				deviceId,
 				turnLightIntensity,
 				turnExausterIntensity,
@@ -119,9 +119,7 @@ function EditActionComponent() {
 
 			navigate({ to: "/actions" });
 		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : "Failed to update custom action",
-			);
+			setError(err instanceof Error ? err.message : "Failed to update action");
 		} finally {
 			setIsSaving(false);
 		}
@@ -150,7 +148,7 @@ function EditActionComponent() {
 					<CardContent className="pt-6">
 						<p className="text-destructive">{error}</p>
 						<Button onClick={handleCancel} className="mt-4">
-							Back to Custom Actions
+							Back to Actions
 						</Button>
 					</CardContent>
 				</Card>
@@ -162,7 +160,7 @@ function EditActionComponent() {
 		<div className="container mx-auto px-4 py-8">
 			<Card>
 				<CardHeader>
-					<CardTitle>Edit Custom Action</CardTitle>
+					<CardTitle>Edit Action</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<form onSubmit={handleSave} className="space-y-6">

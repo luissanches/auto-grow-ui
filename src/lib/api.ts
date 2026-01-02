@@ -86,7 +86,9 @@ class ApiClient {
 			});
 
 			if (!response.ok) {
-				logger.warn("Login failed - invalid response", { status: response.status });
+				logger.warn("Login failed - invalid response", {
+					status: response.status,
+				});
 				this.clearCredentials();
 				return false;
 			}
@@ -268,20 +270,20 @@ class ApiClient {
 		});
 	}
 
-	// Custom Actions
-	async getCustomActions() {
-		return this.request<CustomAction[]>("/api/actions/");
+	// Actions
+	async getActions() {
+		return this.request<Action[]>("/api/actions/");
 	}
 
-	async getCustomAction(id: string) {
-		return this.request<CustomAction>(`/api/actions/${id}`);
+	async getAction(id: string) {
+		return this.request<Action>(`/api/actions/${id}`);
 	}
 
-	async getCustomActionsByDevice(deviceId: string) {
-		return this.request<CustomAction[]>(`/api/actions/device/${deviceId}`);
+	async getActionsByDevice(deviceId: string) {
+		return this.request<Action[]>(`/api/actions/device/${deviceId}`);
 	}
 
-	async createCustomAction(data: {
+	async createAction(data: {
 		deviceId: number;
 		turnLightIntensity: number;
 		turnExausterIntensity: number;
@@ -296,13 +298,13 @@ class ApiClient {
 		cycles: number;
 		status: "active" | "inactive";
 	}) {
-		return this.request<CustomAction>("/api/actions/", {
+		return this.request<Action>("/api/actions/", {
 			method: "POST",
 			body: JSON.stringify(data),
 		});
 	}
 
-	async updateCustomAction(
+	async updateAction(
 		id: string,
 		data: {
 			deviceId?: number;
@@ -320,13 +322,13 @@ class ApiClient {
 			status?: "active" | "inactive";
 		},
 	) {
-		return this.request<CustomAction>(`/api/actions/${id}`, {
+		return this.request<Action>(`/api/actions/${id}`, {
 			method: "PUT",
 			body: JSON.stringify(data),
 		});
 	}
 
-	async deleteCustomAction(id: string) {
+	async deleteAction(id: string) {
 		return this.request(`/api/actions/${id}`, {
 			method: "DELETE",
 		});
@@ -394,7 +396,7 @@ export interface Tracking {
 	protocol?: Protocol;
 }
 
-export interface CustomAction {
+export interface Action {
 	id?: number;
 	deviceId: number;
 	turnLightIntensity: number;

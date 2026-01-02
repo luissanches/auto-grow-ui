@@ -1,6 +1,6 @@
-import { createRootRoute, Outlet, Link } from "@tanstack/react-router";
-import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 
 export const Route = createRootRoute({
 	component: RootComponent,
@@ -55,7 +55,7 @@ function RootComponent() {
 								className="text-sm font-medium hover:underline"
 								activeProps={{ className: "text-primary" }}
 							>
-								Custom Actions
+								Actions
 							</Link>
 						</div>
 						<Button variant="outline" size="sm" onClick={logout}>
