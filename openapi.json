@@ -25,6 +25,10 @@
     {
       "name": "trackings",
       "description": "Tracking management endpoints"
+    },
+    {
+      "name": "actions",
+      "description": "Custom action management endpoints"
     }
   ],
   "components": {
@@ -153,12 +157,25 @@
                   "name": {
                     "type": "string"
                   },
+                  "stageId": {
+                    "type": "number"
+                  },
                   "status": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "required": [
                   "name",
+                  "stageId",
                   "status"
                 ]
               }
@@ -170,12 +187,25 @@
                   "name": {
                     "type": "string"
                   },
+                  "stageId": {
+                    "type": "number"
+                  },
                   "status": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "required": [
                   "name",
+                  "stageId",
                   "status"
                 ]
               }
@@ -187,12 +217,25 @@
                   "name": {
                     "type": "string"
                   },
+                  "stageId": {
+                    "type": "number"
+                  },
                   "status": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "required": [
                   "name",
+                  "stageId",
                   "status"
                 ]
               }
@@ -204,19 +247,19 @@
         }
       }
     },
-    "/api/devices/{id}": {
+    "/api/devices/{deviceId}": {
       "get": {
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "number"
             },
             "in": "path",
-            "name": "id",
+            "name": "deviceId",
             "required": true
           }
         ],
-        "operationId": "getApiDevicesById",
+        "operationId": "getApiDevicesByDeviceId",
         "responses": {
           "200": {}
         }
@@ -225,14 +268,14 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "number"
             },
             "in": "path",
-            "name": "id",
+            "name": "deviceId",
             "required": true
           }
         ],
-        "operationId": "putApiDevicesById",
+        "operationId": "putApiDevicesByDeviceId",
         "requestBody": {
           "required": true,
           "content": {
@@ -243,8 +286,20 @@
                   "name": {
                     "type": "string"
                   },
+                  "stageId": {
+                    "type": "number"
+                  },
                   "status": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
                   }
                 }
               }
@@ -256,8 +311,20 @@
                   "name": {
                     "type": "string"
                   },
+                  "stageId": {
+                    "type": "number"
+                  },
                   "status": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
                   }
                 }
               }
@@ -269,8 +336,20 @@
                   "name": {
                     "type": "string"
                   },
+                  "stageId": {
+                    "type": "number"
+                  },
                   "status": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
                   }
                 }
               }
@@ -280,7 +359,9 @@
         "responses": {
           "200": {}
         }
-      },
+      }
+    },
+    "/api/devices/{id}": {
       "delete": {
         "parameters": [
           {
@@ -569,6 +650,33 @@
                   },
                   "delay": {
                     "type": "number"
+                  },
+                  "startHour": {
+                    "type": "number"
+                  },
+                  "endHour": {
+                    "type": "number"
+                  },
+                  "idealLightIntensity": {
+                    "type": "number"
+                  },
+                  "idealExausterIntensity": {
+                    "type": "number"
+                  },
+                  "idealBlowerIntensity": {
+                    "type": "number"
+                  },
+                  "idealSoilHumidity": {
+                    "type": "number"
+                  },
+                  "idealAirHumidity": {
+                    "type": "number"
+                  },
+                  "idealTemperature": {
+                    "type": "number"
+                  },
+                  "idealCo2": {
+                    "type": "number"
                   }
                 }
               }
@@ -585,6 +693,33 @@
                   },
                   "delay": {
                     "type": "number"
+                  },
+                  "startHour": {
+                    "type": "number"
+                  },
+                  "endHour": {
+                    "type": "number"
+                  },
+                  "idealLightIntensity": {
+                    "type": "number"
+                  },
+                  "idealExausterIntensity": {
+                    "type": "number"
+                  },
+                  "idealBlowerIntensity": {
+                    "type": "number"
+                  },
+                  "idealSoilHumidity": {
+                    "type": "number"
+                  },
+                  "idealAirHumidity": {
+                    "type": "number"
+                  },
+                  "idealTemperature": {
+                    "type": "number"
+                  },
+                  "idealCo2": {
+                    "type": "number"
                   }
                 }
               }
@@ -600,6 +735,33 @@
                     "type": "number"
                   },
                   "delay": {
+                    "type": "number"
+                  },
+                  "startHour": {
+                    "type": "number"
+                  },
+                  "endHour": {
+                    "type": "number"
+                  },
+                  "idealLightIntensity": {
+                    "type": "number"
+                  },
+                  "idealExausterIntensity": {
+                    "type": "number"
+                  },
+                  "idealBlowerIntensity": {
+                    "type": "number"
+                  },
+                  "idealSoilHumidity": {
+                    "type": "number"
+                  },
+                  "idealAirHumidity": {
+                    "type": "number"
+                  },
+                  "idealTemperature": {
+                    "type": "number"
+                  },
+                  "idealCo2": {
                     "type": "number"
                   }
                 }
@@ -805,14 +967,6 @@
                 {
                   "const": "quarter",
                   "type": "string"
-                },
-                {
-                  "const": "semester",
-                  "type": "string"
-                },
-                {
-                  "const": "year",
-                  "type": "string"
                 }
               ]
             },
@@ -935,6 +1089,596 @@
             }
           }
         },
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/actions/": {
+      "get": {
+        "operationId": "getApiActions",
+        "responses": {
+          "200": {}
+        }
+      },
+      "post": {
+        "parameters": [],
+        "operationId": "postApiActions",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceId": {
+                    "type": "number"
+                  },
+                  "turnLightIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnExausterIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnBlowerIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnACOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnWaterOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan1On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan2On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnHumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnDehumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "maxCycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "cycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "deviceId",
+                  "turnLightIntensity",
+                  "turnExausterIntensity",
+                  "turnBlowerIntensity",
+                  "turnACOn",
+                  "turnWaterOn",
+                  "turnFan1On",
+                  "turnFan2On",
+                  "turnHumidifierOn",
+                  "turnDehumidifierOn",
+                  "maxCycles",
+                  "cycles",
+                  "status"
+                ]
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceId": {
+                    "type": "number"
+                  },
+                  "turnLightIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnExausterIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnBlowerIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnACOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnWaterOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan1On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan2On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnHumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnDehumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "maxCycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "cycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "deviceId",
+                  "turnLightIntensity",
+                  "turnExausterIntensity",
+                  "turnBlowerIntensity",
+                  "turnACOn",
+                  "turnWaterOn",
+                  "turnFan1On",
+                  "turnFan2On",
+                  "turnHumidifierOn",
+                  "turnDehumidifierOn",
+                  "maxCycles",
+                  "cycles",
+                  "status"
+                ]
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceId": {
+                    "type": "number"
+                  },
+                  "turnLightIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnExausterIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnBlowerIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnACOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnWaterOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan1On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan2On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnHumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnDehumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "maxCycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "cycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "deviceId",
+                  "turnLightIntensity",
+                  "turnExausterIntensity",
+                  "turnBlowerIntensity",
+                  "turnACOn",
+                  "turnWaterOn",
+                  "turnFan1On",
+                  "turnFan2On",
+                  "turnHumidifierOn",
+                  "turnDehumidifierOn",
+                  "maxCycles",
+                  "cycles",
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/actions/{customActionId}": {
+      "get": {
+        "parameters": [
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "path",
+            "name": "customActionId",
+            "required": true
+          }
+        ],
+        "operationId": "getApiActionsByCustomActionId",
+        "responses": {
+          "200": {}
+        }
+      },
+      "put": {
+        "parameters": [
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "path",
+            "name": "customActionId",
+            "required": true
+          }
+        ],
+        "operationId": "putApiActionsByCustomActionId",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceId": {
+                    "type": "number"
+                  },
+                  "turnLightIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnExausterIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnBlowerIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnACOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnWaterOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan1On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan2On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnHumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnDehumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "maxCycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "cycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceId": {
+                    "type": "number"
+                  },
+                  "turnLightIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnExausterIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnBlowerIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnACOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnWaterOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan1On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan2On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnHumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnDehumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "maxCycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "cycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceId": {
+                    "type": "number"
+                  },
+                  "turnLightIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnExausterIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnBlowerIntensity": {
+                    "minimum": 0,
+                    "maximum": 100,
+                    "type": "number"
+                  },
+                  "turnACOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnWaterOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan1On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnFan2On": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnHumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "turnDehumidifierOn": {
+                    "minimum": 0,
+                    "maximum": 1,
+                    "type": "number"
+                  },
+                  "maxCycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "cycles": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "anyOf": [
+                      {
+                        "const": "active",
+                        "type": "string"
+                      },
+                      {
+                        "const": "inactive",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/actions/device/{deviceId}": {
+      "get": {
+        "parameters": [
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "path",
+            "name": "deviceId",
+            "required": true
+          }
+        ],
+        "operationId": "getApiActionsDeviceByDeviceId",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/actions/{id}": {
+      "delete": {
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "operationId": "deleteApiActionsById",
         "responses": {
           "200": {}
         }
