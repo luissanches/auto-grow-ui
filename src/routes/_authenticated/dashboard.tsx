@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiClient, type Device, type Tracking } from "@/lib/api";
+import { logger } from "@/lib/logger";
 import { formatDate } from "@/lib/utils";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useEffectEvent, useState } from "react";
@@ -28,13 +29,16 @@ function DashboardComponent() {
 	const loadDevices = useEffectEvent(async () => {
 		try {
 			setIsLoading(true);
+			logger.debug("Loading devices");
 			const data = await apiClient.getDevices();
 			setDevices(data);
 			if (data.length > 0 && data[0]) {
 				setSelectedDeviceId(data[0].id.toString());
+				logger.info(`Loaded ${data.length} devices, selected: ${data[0].name}`);
 			}
 			setError(null);
 		} catch (err) {
+			logger.error("Failed to load devices", err);
 			setError(err instanceof Error ? err.message : "Failed to load devices");
 		} finally {
 			setIsLoading(false);
@@ -46,13 +50,16 @@ function DashboardComponent() {
 
 		try {
 			setIsLoading(true);
+			logger.debug(`Loading latest tracking for device ${selectedDeviceId}`);
 			const data = await apiClient.getLatestTracking(selectedDeviceId);
 			setLatestTracking(data);
+			logger.info("Latest tracking loaded successfully");
 			setError(null);
 		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : "Failed to load latest tracking",
-			);
+			logger.warn("No tracking data available for device", {
+				deviceId: selectedDeviceId,
+			});
+			setError(null);
 			setLatestTracking(null);
 		} finally {
 			setIsLoading(false);
@@ -99,7 +106,7 @@ function DashboardComponent() {
 			)}
 			{!isLoading && !error && selectedDeviceId && !latestTracking && (
 				<p className="text-muted-foreground">
-					No tracking data available for this device
+					No data available for this device
 				</p>
 			)}
 

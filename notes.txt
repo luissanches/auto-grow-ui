@@ -37,6 +37,7 @@ and also create a session with turnACOn, turnLightIntensity, turnHumidifierOn, t
 
 create a new screen for custon actions under authenticated routes as a new route. use the openapi.json file as reference.
 
+include a selection box with a list of active devices into screen for list of custon actions
 
  ____ DEPLOY _____
 ssh auto-grow

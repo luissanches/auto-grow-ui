@@ -8,7 +8,8 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { apiClient, type CustomAction } from "@/lib/api";
+import { Select } from "@/components/ui/select";
+import { apiClient, type CustomAction, type Device } from "@/lib/api";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useEffectEvent, useState } from "react";
 
@@ -19,27 +20,40 @@ export const Route = createFileRoute("/_authenticated/actions/")({
 function ActionsComponent() {
 	const navigate = useNavigate();
 	const [actions, setActions] = useState<CustomAction[]>([]);
+	const [devices, setDevices] = useState<Device[]>([]);
+	const [selectedDeviceId, setSelectedDeviceId] = useState<string>("all");
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
-		loadActions();
+		loadData();
 	}, []);
 
-	const loadActions = useEffectEvent(async () => {
+	const loadData = useEffectEvent(async () => {
 		try {
 			setIsLoading(true);
-			const data = await apiClient.getCustomActions();
-			setActions(data);
+			const [actionsData, devicesData] = await Promise.all([
+				apiClient.getCustomActions(),
+				apiClient.getDevices(),
+			]);
+			setActions(actionsData);
+			setDevices(devicesData);
 			setError(null);
 		} catch (err) {
 			setError(
-				err instanceof Error ? err.message : "Failed to load custom actions",
+				err instanceof Error ? err.message : "Failed to load data",
 			);
 		} finally {
 			setIsLoading(false);
 		}
 	});
+
+	const filteredActions =
+		selectedDeviceId === "all"
+			? actions
+			: actions.filter(
+					(action) => action.deviceId === Number(selectedDeviceId),
+			  );
 
 	return (
 		<div className="container mx-auto px-4 py-8">
@@ -47,15 +61,38 @@ function ActionsComponent() {
 				<CardHeader>
 					<div className="flex items-center justify-between">
 						<CardTitle>Custom Actions</CardTitle>
+						<div className="flex items-center gap-2">
+							<label htmlFor="device-filter" className="text-sm font-medium">
+								Filter by Device:
+							</label>
+							<Select
+								id="device-filter"
+								value={selectedDeviceId}
+								onChange={(e) => setSelectedDeviceId(e.target.value)}
+								disabled={isLoading}
+								className="w-48"
+							>
+								<option value="all">All Devices</option>
+								{devices.map((device) => (
+									<option key={device.id} value={device.id}>
+										{device.name}
+									</option>
+								))}
+							</Select>
+						</div>
 					</div>
 				</CardHeader>
 				<CardContent>
 					{isLoading && <p>Loading...</p>}
 					{error && <p className="text-destructive">{error}</p>}
-					{!isLoading && !error && actions.length === 0 && (
-						<p className="text-muted-foreground">No custom actions found</p>
+					{!isLoading && !error && filteredActions.length === 0 && (
+						<p className="text-muted-foreground">
+							{selectedDeviceId === "all"
+								? "No custom actions found"
+								: "No custom actions found for the selected device"}
+						</p>
 					)}
-					{!isLoading && !error && actions.length > 0 && (
+					{!isLoading && !error && filteredActions.length > 0 && (
 						<div className="overflow-x-auto">
 							<Table>
 								<TableHeader>
@@ -72,7 +109,7 @@ function ActionsComponent() {
 									</TableRow>
 								</TableHeader>
 								<TableBody>
-									{actions.map((action) => (
+									{filteredActions.map((action) => (
 										<TableRow key={action.id}>
 											<TableCell>{action.id}</TableCell>
 											<TableCell>{action.device?.name || "N/A"}</TableCell>

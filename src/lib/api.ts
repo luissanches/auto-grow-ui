@@ -1,3 +1,5 @@
+import { logger } from "./logger";
+
 const API_BASE_URL =
 	import.meta.env.VITE_API_BASE_URL ?? `${window.location.origin}:3000`;
 
@@ -7,11 +9,13 @@ class ApiClient {
 	setCredentials(username: string, password: string) {
 		this.credentials = { username, password };
 		localStorage.setItem("auth", btoa(`${username}:${password}`));
+		logger.info("User credentials set");
 	}
 
 	clearCredentials() {
 		this.credentials = null;
 		localStorage.removeItem("auth");
+		logger.info("User credentials cleared");
 	}
 
 	loadCredentials() {
@@ -38,28 +42,41 @@ class ApiClient {
 		endpoint: string,
 		options: RequestInit = {},
 	): Promise<T> {
-		const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-			...options,
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: this.getAuthHeader(),
-				...options.headers,
-			},
-		});
+		const method = options.method || "GET";
+		logger.apiRequest(method, endpoint, options.body);
 
-		if (!response.ok) {
-			if (response.status === 401) {
-				this.clearCredentials();
-				throw new Error("Unauthorized");
+		try {
+			const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+				...options,
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: this.getAuthHeader(),
+					...options.headers,
+				},
+			});
+
+			if (!response.ok) {
+				if (response.status === 401) {
+					this.clearCredentials();
+					logger.error("Unauthorized access - credentials cleared");
+					throw new Error("Unauthorized");
+				}
+				logger.apiResponse(method, endpoint, response.status);
+				throw new Error(`API error: ${response.statusText}`);
 			}
-			throw new Error(`API error: ${response.statusText}`);
-		}
 
-		return response.json();
+			const data = await response.json();
+			logger.apiResponse(method, endpoint, response.status);
+			return data;
+		} catch (error) {
+			logger.apiError(method, endpoint, error);
+			throw error;
+		}
 	}
 
 	async login(username: string, password: string): Promise<boolean> {
 		try {
+			logger.info("Attempting login", { username });
 			const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
 				method: "POST",
 				headers: {
@@ -69,6 +86,7 @@ class ApiClient {
 			});
 
 			if (!response.ok) {
+				logger.warn("Login failed - invalid response", { status: response.status });
 				this.clearCredentials();
 				return false;
 			}
@@ -76,12 +94,15 @@ class ApiClient {
 			const data = await response.json();
 			if (data.success) {
 				this.setCredentials(username, password);
+				logger.info("Login successful");
 				return true;
 			}
 
+			logger.warn("Login failed - invalid credentials");
 			this.clearCredentials();
 			return false;
-		} catch {
+		} catch (error) {
+			logger.error("Login error", error);
 			this.clearCredentials();
 			return false;
 		}
