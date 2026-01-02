@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select } from "@/components/ui/select";
 import {
 	Table,
 	TableBody,
@@ -8,7 +9,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Select } from "@/components/ui/select";
 import { apiClient, type CustomAction, type Device } from "@/lib/api";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useEffectEvent, useState } from "react";
@@ -24,6 +24,7 @@ function ActionsComponent() {
 	const [selectedDeviceId, setSelectedDeviceId] = useState<string>("all");
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [deletingActionId, setDeletingActionId] = useState<number | null>(null);
 
 	useEffect(() => {
 		loadData();
@@ -40,20 +41,44 @@ function ActionsComponent() {
 			setDevices(devicesData);
 			setError(null);
 		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : "Failed to load data",
-			);
+			setError(err instanceof Error ? err.message : "Failed to load data");
 		} finally {
 			setIsLoading(false);
 		}
 	});
+
+	const handleDelete = async (actionId: number) => {
+		if (
+			!confirm(
+				"Are you sure you want to delete this custom action? This action cannot be undone.",
+			)
+		) {
+			return;
+		}
+
+		try {
+			setDeletingActionId(actionId);
+			setError(null);
+
+			await apiClient.deleteCustomAction(actionId.toString());
+
+			// Remove the deleted action from the list
+			setActions(actions.filter((action) => action.id !== actionId));
+		} catch (err) {
+			setError(
+				err instanceof Error ? err.message : "Failed to delete custom action",
+			);
+		} finally {
+			setDeletingActionId(null);
+		}
+	};
 
 	const filteredActions =
 		selectedDeviceId === "all"
 			? actions
 			: actions.filter(
 					(action) => action.deviceId === Number(selectedDeviceId),
-			  );
+				);
 
 	return (
 		<div className="container mx-auto px-4 py-8">
@@ -142,8 +167,23 @@ function ActionsComponent() {
 														onClick={() =>
 															navigate({ to: `/actions/${action.id}/edit` })
 														}
+														style={{ cursor: "pointer" }}
+														disabled={deletingActionId === action.id}
 													>
 														Edit
+													</Button>
+													<Button
+														variant="outline"
+														size="sm"
+														onClick={() => action.id && handleDelete(action.id)}
+														disabled={
+															deletingActionId === action.id || !action.id
+														}
+														style={{ cursor: "pointer" }}
+													>
+														{deletingActionId === action.id
+															? "Deleting..."
+															: "Delete"}
 													</Button>
 												</div>
 											</TableCell>
