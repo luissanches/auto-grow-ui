@@ -23,6 +23,7 @@ import { Route as AuthenticatedProtocolsIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedDevicesIndexRouteImport } from './routes/_authenticated/devices.index'
 import { Route as AuthenticatedActionsIndexRouteImport } from './routes/_authenticated/actions.index'
 import { Route as AuthenticatedTrackingTrackingIdRouteImport } from './routes/_authenticated/tracking.$trackingId'
+import { Route as AuthenticatedActionsNewRouteImport } from './routes/_authenticated/actions.new'
 import { Route as AuthenticatedProtocolsProtocolIdEditRouteImport } from './routes/_authenticated/protocols.$protocolId.edit'
 import { Route as AuthenticatedDevicesDeviceIdEditRouteImport } from './routes/_authenticated/devices.$deviceId.edit'
 import { Route as AuthenticatedActionsActionIdEditRouteImport } from './routes/_authenticated/actions.$actionId.edit'
@@ -101,6 +102,11 @@ const AuthenticatedTrackingTrackingIdRoute =
     path: '/$trackingId',
     getParentRoute: () => AuthenticatedTrackingRoute,
   } as any)
+const AuthenticatedActionsNewRoute = AuthenticatedActionsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AuthenticatedActionsRoute,
+} as any)
 const AuthenticatedProtocolsProtocolIdEditRoute =
   AuthenticatedProtocolsProtocolIdEditRouteImport.update({
     id: '/$protocolId/edit',
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/protocols': typeof AuthenticatedProtocolsRouteWithChildren
   '/stages': typeof AuthenticatedStagesRoute
   '/tracking': typeof AuthenticatedTrackingRouteWithChildren
+  '/actions/new': typeof AuthenticatedActionsNewRoute
   '/tracking/$trackingId': typeof AuthenticatedTrackingTrackingIdRoute
   '/actions/': typeof AuthenticatedActionsIndexRoute
   '/devices/': typeof AuthenticatedDevicesIndexRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/stages': typeof AuthenticatedStagesRoute
+  '/actions/new': typeof AuthenticatedActionsNewRoute
   '/tracking/$trackingId': typeof AuthenticatedTrackingTrackingIdRoute
   '/actions': typeof AuthenticatedActionsIndexRoute
   '/devices': typeof AuthenticatedDevicesIndexRoute
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   '/_authenticated/protocols': typeof AuthenticatedProtocolsRouteWithChildren
   '/_authenticated/stages': typeof AuthenticatedStagesRoute
   '/_authenticated/tracking': typeof AuthenticatedTrackingRouteWithChildren
+  '/_authenticated/actions/new': typeof AuthenticatedActionsNewRoute
   '/_authenticated/tracking/$trackingId': typeof AuthenticatedTrackingTrackingIdRoute
   '/_authenticated/actions/': typeof AuthenticatedActionsIndexRoute
   '/_authenticated/devices/': typeof AuthenticatedDevicesIndexRoute
@@ -183,6 +192,7 @@ export interface FileRouteTypes {
     | '/protocols'
     | '/stages'
     | '/tracking'
+    | '/actions/new'
     | '/tracking/$trackingId'
     | '/actions/'
     | '/devices/'
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/dashboard'
     | '/stages'
+    | '/actions/new'
     | '/tracking/$trackingId'
     | '/actions'
     | '/devices'
@@ -216,6 +227,7 @@ export interface FileRouteTypes {
     | '/_authenticated/protocols'
     | '/_authenticated/stages'
     | '/_authenticated/tracking'
+    | '/_authenticated/actions/new'
     | '/_authenticated/tracking/$trackingId'
     | '/_authenticated/actions/'
     | '/_authenticated/devices/'
@@ -332,6 +344,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTrackingTrackingIdRouteImport
       parentRoute: typeof AuthenticatedTrackingRoute
     }
+    '/_authenticated/actions/new': {
+      id: '/_authenticated/actions/new'
+      path: '/new'
+      fullPath: '/actions/new'
+      preLoaderRoute: typeof AuthenticatedActionsNewRouteImport
+      parentRoute: typeof AuthenticatedActionsRoute
+    }
     '/_authenticated/protocols/$protocolId/edit': {
       id: '/_authenticated/protocols/$protocolId/edit'
       path: '/$protocolId/edit'
@@ -357,11 +376,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedActionsRouteChildren {
+  AuthenticatedActionsNewRoute: typeof AuthenticatedActionsNewRoute
   AuthenticatedActionsIndexRoute: typeof AuthenticatedActionsIndexRoute
   AuthenticatedActionsActionIdEditRoute: typeof AuthenticatedActionsActionIdEditRoute
 }
 
 const AuthenticatedActionsRouteChildren: AuthenticatedActionsRouteChildren = {
+  AuthenticatedActionsNewRoute: AuthenticatedActionsNewRoute,
   AuthenticatedActionsIndexRoute: AuthenticatedActionsIndexRoute,
   AuthenticatedActionsActionIdEditRoute: AuthenticatedActionsActionIdEditRoute,
 }

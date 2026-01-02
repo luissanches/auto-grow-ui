@@ -79,6 +79,7 @@ function DevicesComponent() {
 													onClick={() =>
 														navigate({ to: `/devices/${device.id}/edit` })
 													}
+													className="cursor-pointer"
 												>
 													Edit
 												</Button>

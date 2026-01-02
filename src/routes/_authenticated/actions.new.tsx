@@ -1,25 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { apiClient, type CustomAction, type Device } from "@/lib/api";
+import { apiClient, type Device } from "@/lib/api";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useEffectEvent, useState } from "react";
 
-export const Route = createFileRoute("/_authenticated/actions/$actionId/edit")({
-	component: EditActionComponent,
+export const Route = createFileRoute("/_authenticated/actions/new")({
+	component: NewActionComponent,
 });
 
-function EditActionComponent() {
-	const { actionId } = Route.useParams();
+function NewActionComponent() {
 	const navigate = useNavigate();
 
-	const [action, setAction] = useState<CustomAction | null>(null);
 	const [devices, setDevices] = useState<Device[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [isSaving, setIsSaving] = useState(false);
 
-	// Form state
+	// Form state with default values
 	const [deviceId, setDeviceId] = useState<number | null>(null);
 	const [status, setStatus] = useState<"active" | "inactive">("active");
 	const [turnLightIntensity, setTurnLightIntensity] = useState(0);
@@ -41,32 +39,11 @@ function EditActionComponent() {
 	const loadData = useEffectEvent(async () => {
 		try {
 			setIsLoading(true);
-			const [actionData, devicesData] = await Promise.all([
-				apiClient.getCustomAction(actionId),
-				apiClient.getDevices(),
-			]);
-
-			setAction(actionData);
+			const devicesData = await apiClient.getDevices();
 			setDevices(devicesData);
-
-			// Populate form fields
-			setDeviceId(actionData.deviceId);
-			setStatus(actionData.status);
-			setTurnLightIntensity(actionData.turnLightIntensity);
-			setTurnExausterIntensity(actionData.turnExausterIntensity);
-			setTurnBlowerIntensity(actionData.turnBlowerIntensity);
-			setTurnACOn(actionData.turnACOn);
-			setTurnWaterOn(actionData.turnWaterOn);
-			setTurnFan1On(actionData.turnFan1On);
-			setTurnFan2On(actionData.turnFan2On);
-			setTurnHumidifierOn(actionData.turnHumidifierOn);
-			setTurnDehumidifierOn(actionData.turnDehumidifierOn);
-			setMaxCycles(actionData.maxCycles);
-			setCycles(actionData.cycles);
-
 			setError(null);
 		} catch (err) {
-			setError(err instanceof Error ? err.message : "Failed to load data");
+			setError(err instanceof Error ? err.message : "Failed to load devices");
 		} finally {
 			setIsLoading(false);
 		}
@@ -101,7 +78,7 @@ function EditActionComponent() {
 			setIsSaving(true);
 			setError(null);
 
-			await apiClient.updateCustomAction(actionId, {
+			await apiClient.createCustomAction({
 				deviceId,
 				turnLightIntensity,
 				turnExausterIntensity,
@@ -120,7 +97,7 @@ function EditActionComponent() {
 			navigate({ to: "/actions" });
 		} catch (err) {
 			setError(
-				err instanceof Error ? err.message : "Failed to update custom action",
+				err instanceof Error ? err.message : "Failed to create custom action",
 			);
 		} finally {
 			setIsSaving(false);
@@ -143,7 +120,7 @@ function EditActionComponent() {
 		);
 	}
 
-	if (error && !action) {
+	if (error && devices.length === 0) {
 		return (
 			<div className="container mx-auto px-4 py-8">
 				<Card>
@@ -162,7 +139,7 @@ function EditActionComponent() {
 		<div className="container mx-auto px-4 py-8">
 			<Card>
 				<CardHeader>
-					<CardTitle>Edit Custom Action</CardTitle>
+					<CardTitle>Create New Custom Action</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<form onSubmit={handleSave} className="space-y-6">
@@ -216,9 +193,7 @@ function EditActionComponent() {
 
 						{/* Section 2: Intensity Controls */}
 						<div className="space-y-4">
-							<h3 className="text-lg font-medium">
-								Intensity Controls (0-100)
-							</h3>
+							<h3 className="text-lg font-medium">Intensity Controls (0-100)</h3>
 
 							<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 								<div className="space-y-2">
@@ -431,19 +406,14 @@ function EditActionComponent() {
 
 						{/* Form Actions */}
 						<div className="flex gap-2 pt-4">
-							<Button
-								type="submit"
-								disabled={isSaving}
-								className="cursor-pointer"
-							>
-								{isSaving ? "Saving..." : "Save Changes"}
+							<Button type="submit" disabled={isSaving}>
+								{isSaving ? "Creating..." : "Create Custom Action"}
 							</Button>
 							<Button
 								type="button"
 								variant="outline"
 								onClick={handleCancel}
 								disabled={isSaving}
-								className="cursor-pointer"
 							>
 								Cancel
 							</Button>

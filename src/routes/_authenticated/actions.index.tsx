@@ -84,10 +84,25 @@ function ActionsComponent() {
 		<div className="container mx-auto px-4 py-8">
 			<Card>
 				<CardHeader>
-					<div className="flex items-center justify-between">
+					<div className="flex justify-between">
 						<CardTitle>Custom Actions</CardTitle>
-						<div className="flex items-center gap-2">
-							<label htmlFor="device-filter" className="text-sm font-medium">
+						<Button
+							className="cursor-pointer"
+							onClick={() => navigate({ to: "/actions/new" })}
+							disabled={isLoading}
+							variant="outline"
+						>
+							New Custom Action
+						</Button>
+					</div>
+				</CardHeader>
+				<CardContent>
+					<div className="mb-6 flex gap-4">
+						<div className="flex-1">
+							<label
+								htmlFor="device-filter"
+								className="text-sm font-medium block mb-2"
+							>
 								Filter by Device:
 							</label>
 							<Select
@@ -95,7 +110,7 @@ function ActionsComponent() {
 								value={selectedDeviceId}
 								onChange={(e) => setSelectedDeviceId(e.target.value)}
 								disabled={isLoading}
-								className="w-48"
+								className="w-full max-w-md"
 							>
 								<option value="all">All Devices</option>
 								{devices.map((device) => (
@@ -106,8 +121,6 @@ function ActionsComponent() {
 							</Select>
 						</div>
 					</div>
-				</CardHeader>
-				<CardContent>
 					{isLoading && <p>Loading...</p>}
 					{error && <p className="text-destructive">{error}</p>}
 					{!isLoading && !error && filteredActions.length === 0 && (
@@ -167,7 +180,7 @@ function ActionsComponent() {
 														onClick={() =>
 															navigate({ to: `/actions/${action.id}/edit` })
 														}
-														style={{ cursor: "pointer" }}
+														className="cursor-pointer"
 														disabled={deletingActionId === action.id}
 													>
 														Edit
@@ -179,7 +192,7 @@ function ActionsComponent() {
 														disabled={
 															deletingActionId === action.id || !action.id
 														}
-														style={{ cursor: "pointer" }}
+														className="cursor-pointer"
 													>
 														{deletingActionId === action.id
 															? "Deleting..."

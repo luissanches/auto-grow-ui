@@ -79,6 +79,7 @@ function ProtocolsComponent() {
 													variant="outline"
 													size="sm"
 													onClick={() => handleEdit(protocol.id)}
+													className="cursor-pointer"
 												>
 													Edit
 												</Button>

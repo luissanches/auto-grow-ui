@@ -169,6 +169,7 @@ function TrackingComponent() {
 												<Button
 													variant="outline"
 													size="sm"
+													className="cursor-pointer"
 													onClick={() =>
 														navigate({
 															to: "/tracking/$trackingId",
