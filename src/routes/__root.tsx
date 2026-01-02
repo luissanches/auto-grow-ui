@@ -50,6 +50,13 @@ function RootComponent() {
 							>
 								Tracking
 							</Link>
+							<Link
+								to="/actions"
+								className="text-sm font-medium hover:underline"
+								activeProps={{ className: "text-primary" }}
+							>
+								Custom Actions
+							</Link>
 						</div>
 						<Button variant="outline" size="sm" onClick={logout}>
 							Logout

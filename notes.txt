@@ -35,6 +35,7 @@ based on latest tracking retrivied create a top session with  device name, stage
 with temperature, airHumidity, lux, soilHumidity, co2, and createdAt.
 and also create a session with turnACOn, turnLightIntensity, turnHumidifierOn, turnDehumidifierOn, turnFan1On, turnFan2On, turnExausterIntensity, turnBlowerIntensity, turnWaterOn
 
+create a new screen for custon actions under authenticated routes as a new route. use the openapi.json file as reference.
 
 
  ____ DEPLOY _____

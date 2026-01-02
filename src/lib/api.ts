@@ -246,6 +246,70 @@ class ApiClient {
 			method: "DELETE",
 		});
 	}
+
+	// Custom Actions
+	async getCustomActions() {
+		return this.request<CustomAction[]>("/api/actions/");
+	}
+
+	async getCustomAction(id: string) {
+		return this.request<CustomAction>(`/api/actions/${id}`);
+	}
+
+	async getCustomActionsByDevice(deviceId: string) {
+		return this.request<CustomAction[]>(`/api/actions/device/${deviceId}`);
+	}
+
+	async createCustomAction(data: {
+		deviceId: number;
+		turnLightIntensity: number;
+		turnExausterIntensity: number;
+		turnBlowerIntensity: number;
+		turnACOn: number;
+		turnWaterOn: number;
+		turnFan1On: number;
+		turnFan2On: number;
+		turnHumidifierOn: number;
+		turnDehumidifierOn: number;
+		maxCycles: number;
+		cycles: number;
+		status: "active" | "inactive";
+	}) {
+		return this.request<CustomAction>("/api/actions/", {
+			method: "POST",
+			body: JSON.stringify(data),
+		});
+	}
+
+	async updateCustomAction(
+		id: string,
+		data: {
+			deviceId?: number;
+			turnLightIntensity?: number;
+			turnExausterIntensity?: number;
+			turnBlowerIntensity?: number;
+			turnACOn?: number;
+			turnWaterOn?: number;
+			turnFan1On?: number;
+			turnFan2On?: number;
+			turnHumidifierOn?: number;
+			turnDehumidifierOn?: number;
+			maxCycles?: number;
+			cycles?: number;
+			status?: "active" | "inactive";
+		},
+	) {
+		return this.request<CustomAction>(`/api/actions/${id}`, {
+			method: "PUT",
+			body: JSON.stringify(data),
+		});
+	}
+
+	async deleteCustomAction(id: string) {
+		return this.request(`/api/actions/${id}`, {
+			method: "DELETE",
+		});
+	}
 }
 
 export const apiClient = new ApiClient();
@@ -307,4 +371,24 @@ export interface Tracking {
 	turnDehumidifierOn?: boolean;
 	createdAt: string;
 	protocol?: Protocol;
+}
+
+export interface CustomAction {
+	id?: number;
+	deviceId: number;
+	turnLightIntensity: number;
+	turnExausterIntensity: number;
+	turnBlowerIntensity: number;
+	turnACOn: number;
+	turnWaterOn: number;
+	turnFan1On: number;
+	turnFan2On: number;
+	turnHumidifierOn: number;
+	turnDehumidifierOn: number;
+	maxCycles: number;
+	cycles: number;
+	status: "active" | "inactive";
+	createdAt?: string;
+	updatedAt?: string;
+	device?: Device;
 }
