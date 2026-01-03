@@ -21,7 +21,9 @@ function ActionsComponent() {
 	const navigate = useNavigate();
 	const [actions, setActions] = useState<Action[]>([]);
 	const [devices, setDevices] = useState<Device[]>([]);
-	const [selectedDeviceId, setSelectedDeviceId] = useState<string>("all");
+	const [selectedDeviceId, setSelectedDeviceId] = useState<number | undefined>(
+		0,
+	);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [deletingActionId, setDeletingActionId] = useState<number | null>(null);
@@ -33,12 +35,16 @@ function ActionsComponent() {
 	const loadData = useEffectEvent(async () => {
 		try {
 			setIsLoading(true);
-			const [actionsData, devicesData] = await Promise.all([
-				apiClient.getActions(),
-				apiClient.getDevices(),
-			]);
-			setActions(actionsData);
+			const devicesData = await apiClient.getDevices();
 			setDevices(devicesData);
+			setSelectedDeviceId(devicesData[0]?.id);
+
+			const actionsData = await apiClient.getActionsByDevice(
+				devicesData[0]?.id || 0,
+			);
+
+			console.log("actionsData :>> ", actionsData);
+			setActions([actionsData]);
 			setError(null);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Failed to load data");
@@ -71,13 +77,6 @@ function ActionsComponent() {
 		}
 	};
 
-	const filteredActions =
-		selectedDeviceId === "all"
-			? actions
-			: actions.filter(
-					(action) => action.deviceId === Number(selectedDeviceId),
-				);
-
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<Card>
@@ -101,16 +100,15 @@ function ActionsComponent() {
 								htmlFor="device-filter"
 								className="text-sm font-medium block mb-2"
 							>
-								Filter by Device:
+								Select Device
 							</label>
 							<Select
 								id="device-filter"
 								value={selectedDeviceId}
-								onChange={(e) => setSelectedDeviceId(e.target.value)}
+								onChange={(e) => setSelectedDeviceId(+e.target.value)}
 								disabled={isLoading}
 								className="w-full max-w-md"
 							>
-								<option value="all">All Devices</option>
 								{devices.map((device) => (
 									<option key={device.id} value={device.id}>
 										{device.name}
@@ -121,14 +119,12 @@ function ActionsComponent() {
 					</div>
 					{isLoading && <p>Loading...</p>}
 					{error && <p className="text-destructive">{error}</p>}
-					{!isLoading && !error && filteredActions.length === 0 && (
+					{!isLoading && !error && actions.length === 0 && (
 						<p className="text-muted-foreground">
-							{selectedDeviceId === "all"
-								? "No actions found"
-								: "No actions found for the selected device"}
+							No actions found for the selected device
 						</p>
 					)}
-					{!isLoading && !error && filteredActions.length > 0 && (
+					{!isLoading && !error && actions.length > 0 && (
 						<div className="overflow-x-auto">
 							<Table>
 								<TableHeader>
@@ -144,7 +140,7 @@ function ActionsComponent() {
 									</TableRow>
 								</TableHeader>
 								<TableBody>
-									{filteredActions.map((action) => (
+									{actions.map((action) => (
 										<TableRow key={action.id}>
 											<TableCell>{action.id}</TableCell>
 											<TableCell>

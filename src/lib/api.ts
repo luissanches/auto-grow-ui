@@ -279,8 +279,10 @@ class ApiClient {
 		return this.request<Action>(`/api/actions/${id}`);
 	}
 
-	async getActionsByDevice(deviceId: string) {
-		return this.request<Action[]>(`/api/actions/device/${deviceId}`);
+	async getActionsByDevice(deviceId: number) {
+		return this.request<Action>(
+			`/api/actions/device/${deviceId}?skip_increment=true`,
+		);
 	}
 
 	async createAction(data: {
