@@ -134,7 +134,6 @@ function ActionsComponent() {
 								<TableHeader>
 									<TableRow>
 										<TableHead>ID</TableHead>
-										<TableHead>Device</TableHead>
 										<TableHead>AC</TableHead>
 										<TableHead>Light</TableHead>
 										<TableHead>Exauster</TableHead>
@@ -148,8 +147,6 @@ function ActionsComponent() {
 									{filteredActions.map((action) => (
 										<TableRow key={action.id}>
 											<TableCell>{action.id}</TableCell>
-											<TableCell>{action.device?.name || "N/A"}</TableCell>
-
 											<TableCell>
 												{action.turnACOn === 1 ? "On" : "Off"}
 											</TableCell>
