@@ -28,7 +28,7 @@
     },
     {
       "name": "actions",
-      "description": "Custom action management endpoints"
+      "description": "Action management endpoints"
     }
   ],
   "components": {
@@ -1166,18 +1166,6 @@
                   "cycles": {
                     "minimum": 0,
                     "type": "number"
-                  },
-                  "status": {
-                    "anyOf": [
-                      {
-                        "const": "active",
-                        "type": "string"
-                      },
-                      {
-                        "const": "inactive",
-                        "type": "string"
-                      }
-                    ]
                   }
                 },
                 "required": [
@@ -1192,8 +1180,7 @@
                   "turnHumidifierOn",
                   "turnDehumidifierOn",
                   "maxCycles",
-                  "cycles",
-                  "status"
+                  "cycles"
                 ]
               }
             },
@@ -1256,18 +1243,6 @@
                   "cycles": {
                     "minimum": 0,
                     "type": "number"
-                  },
-                  "status": {
-                    "anyOf": [
-                      {
-                        "const": "active",
-                        "type": "string"
-                      },
-                      {
-                        "const": "inactive",
-                        "type": "string"
-                      }
-                    ]
                   }
                 },
                 "required": [
@@ -1282,8 +1257,7 @@
                   "turnHumidifierOn",
                   "turnDehumidifierOn",
                   "maxCycles",
-                  "cycles",
-                  "status"
+                  "cycles"
                 ]
               }
             },
@@ -1346,18 +1320,6 @@
                   "cycles": {
                     "minimum": 0,
                     "type": "number"
-                  },
-                  "status": {
-                    "anyOf": [
-                      {
-                        "const": "active",
-                        "type": "string"
-                      },
-                      {
-                        "const": "inactive",
-                        "type": "string"
-                      }
-                    ]
                   }
                 },
                 "required": [
@@ -1372,8 +1334,7 @@
                   "turnHumidifierOn",
                   "turnDehumidifierOn",
                   "maxCycles",
-                  "cycles",
-                  "status"
+                  "cycles"
                 ]
               }
             }
@@ -1384,7 +1345,7 @@
         }
       }
     },
-    "/api/actions/{customActionId}": {
+    "/api/actions/{actionId}": {
       "get": {
         "parameters": [
           {
@@ -1392,11 +1353,11 @@
               "type": "number"
             },
             "in": "path",
-            "name": "customActionId",
+            "name": "actionId",
             "required": true
           }
         ],
-        "operationId": "getApiActionsByCustomActionId",
+        "operationId": "getApiActionsByActionId",
         "responses": {
           "200": {}
         }
@@ -1408,11 +1369,11 @@
               "type": "number"
             },
             "in": "path",
-            "name": "customActionId",
+            "name": "actionId",
             "required": true
           }
         ],
-        "operationId": "putApiActionsByCustomActionId",
+        "operationId": "putApiActionsByActionId",
         "requestBody": {
           "required": true,
           "content": {
@@ -1646,6 +1607,22 @@
         "responses": {
           "200": {}
         }
+      },
+      "delete": {
+        "parameters": [
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "path",
+            "name": "actionId",
+            "required": true
+          }
+        ],
+        "operationId": "deleteApiActionsByActionId",
+        "responses": {
+          "200": {}
+        }
       }
     },
     "/api/actions/device/{deviceId}": {
@@ -1658,27 +1635,17 @@
             "in": "path",
             "name": "deviceId",
             "required": true
-          }
-        ],
-        "operationId": "getApiActionsDeviceByDeviceId",
-        "responses": {
-          "200": {}
-        }
-      }
-    },
-    "/api/actions/{id}": {
-      "delete": {
-        "parameters": [
+          },
           {
             "schema": {
-              "type": "string"
+              "type": "boolean"
             },
-            "in": "path",
-            "name": "id",
+            "in": "query",
+            "name": "skip_increment",
             "required": true
           }
         ],
-        "operationId": "deleteApiActionsById",
+        "operationId": "getApiActionsDeviceByDeviceId",
         "responses": {
           "200": {}
         }

@@ -1,15 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select } from "@/components/ui/select";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
 import { apiClient, type Action, type Device } from "@/lib/api";
+import { formatDate } from "@/lib/utils";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useEffectEvent, useState } from "react";
 
@@ -19,14 +12,14 @@ export const Route = createFileRoute("/_authenticated/actions/")({
 
 function ActionsComponent() {
 	const navigate = useNavigate();
-	const [actions, setActions] = useState<Action[]>([]);
+	const [action, setAction] = useState<Action | null>(null);
 	const [devices, setDevices] = useState<Device[]>([]);
 	const [selectedDeviceId, setSelectedDeviceId] = useState<number | undefined>(
 		0,
 	);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [deletingActionId, setDeletingActionId] = useState<number | null>(null);
+	const [isDeleting, setIsDeleting] = useState(false);
 
 	useEffect(() => {
 		loadData();
@@ -44,7 +37,7 @@ function ActionsComponent() {
 			);
 
 			console.log("actionsData :>> ", actionsData);
-			setActions([actionsData]);
+			setAction(actionsData);
 			setError(null);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Failed to load data");
@@ -63,17 +56,17 @@ function ActionsComponent() {
 		}
 
 		try {
-			setDeletingActionId(actionId);
+			setIsDeleting(true);
 			setError(null);
 
 			await apiClient.deleteAction(actionId.toString());
 
-			// Remove the deleted action from the list
-			setActions(actions.filter((action) => action.id !== actionId));
+			// Clear the action
+			setAction(null);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Failed to delete action");
 		} finally {
-			setDeletingActionId(null);
+			setIsDeleting(false);
 		}
 	};
 
@@ -119,42 +112,132 @@ function ActionsComponent() {
 					</div>
 					{isLoading && <p>Loading...</p>}
 					{error && <p className="text-destructive">{error}</p>}
-					{!isLoading && !error && actions.length === 0 && (
+					{!isLoading && !error && !action && (
 						<p className="text-muted-foreground">
-							No actions found for the selected device
+							No action found for the selected device
 						</p>
 					)}
-					{!isLoading && !error && actions.length > 0 && (
-						<div className="overflow-x-auto">
-							<Table>
-								<TableHeader>
-									<TableRow>
-										<TableHead>ID</TableHead>
-										<TableHead>AC</TableHead>
-										<TableHead>Light</TableHead>
-										<TableHead>Exauster</TableHead>
-										<TableHead>Blower</TableHead>
-										<TableHead>Cycles</TableHead>
-										<TableHead>Status</TableHead>
-										<TableHead>Actions</TableHead>
-									</TableRow>
-								</TableHeader>
-								<TableBody>
-									{actions.map((action) => (
-										<TableRow key={action.id}>
-											<TableCell>{action.id}</TableCell>
-											<TableCell>
-												{action.turnACOn === 1 ? "On" : "Off"}
-											</TableCell>
-											<TableCell>{action.turnLightIntensity}%</TableCell>
-											<TableCell>{action.turnExausterIntensity}%</TableCell>
-											<TableCell>{action.turnBlowerIntensity}%</TableCell>
-											<TableCell>
-												{action.cycles}/{action.maxCycles}
-											</TableCell>
-											<TableCell>
+					{!isLoading && !error && action && (
+						<Card>
+							<CardHeader>
+								<div className="flex justify-between items-center">
+									<CardTitle>Action Details</CardTitle>
+									<div className="flex gap-2">
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={() =>
+												navigate({ to: `/actions/${action.id}/edit` })
+											}
+											className="cursor-pointer"
+											disabled={isDeleting}
+										>
+											Edit
+										</Button>
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={() => action.id && handleDelete(action.id)}
+											disabled={isDeleting || !action.id}
+											className="cursor-pointer"
+										>
+											{isDeleting ? "Deleting..." : "Delete"}
+										</Button>
+									</div>
+								</div>
+							</CardHeader>
+							<CardContent>
+								<div className="space-y-6">
+									{/* Intensity Controls Section */}
+									<div>
+										<h3 className="text-sm font-semibold mb-3 text-muted-foreground">
+											Intensity Controls
+										</h3>
+										<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+											<div className="space-y-1">
+												<p className="text-sm font-medium">Light Intensity</p>
+												<p className="text-2xl font-bold">
+													{action.turnLightIntensity}%
+												</p>
+											</div>
+											<div className="space-y-1">
+												<p className="text-sm font-medium">
+													Exhauster Intensity
+												</p>
+												<p className="text-2xl font-bold">
+													{action.turnExausterIntensity}%
+												</p>
+											</div>
+											<div className="space-y-1">
+												<p className="text-sm font-medium">Blower Intensity</p>
+												<p className="text-2xl font-bold">
+													{action.turnBlowerIntensity}%
+												</p>
+											</div>
+										</div>
+									</div>
+
+									{/* Binary Controls Section */}
+									<div>
+										<h3 className="text-sm font-semibold mb-3 text-muted-foreground">
+											Device Controls
+										</h3>
+										<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+											<div className="space-y-1">
+												<p className="text-sm font-medium">AC</p>
+												<p className="text-lg font-semibold">
+													{action.turnACOn === 1 ? "On" : "Off"}
+												</p>
+											</div>
+											<div className="space-y-1">
+												<p className="text-sm font-medium">Water</p>
+												<p className="text-lg font-semibold">
+													{action.turnWaterOn === 1 ? "On" : "Off"}
+												</p>
+											</div>
+											<div className="space-y-1">
+												<p className="text-sm font-medium">Fan 1</p>
+												<p className="text-lg font-semibold">
+													{action.turnFan1On === 1 ? "On" : "Off"}
+												</p>
+											</div>
+											<div className="space-y-1">
+												<p className="text-sm font-medium">Fan 2</p>
+												<p className="text-lg font-semibold">
+													{action.turnFan2On === 1 ? "On" : "Off"}
+												</p>
+											</div>
+											<div className="space-y-1">
+												<p className="text-sm font-medium">Humidifier</p>
+												<p className="text-lg font-semibold">
+													{action.turnHumidifierOn === 1 ? "On" : "Off"}
+												</p>
+											</div>
+											<div className="space-y-1">
+												<p className="text-sm font-medium">Dehumidifier</p>
+												<p className="text-lg font-semibold">
+													{action.turnDehumidifierOn === 1 ? "On" : "Off"}
+												</p>
+											</div>
+										</div>
+									</div>
+
+									{/* Cycles & Status Section */}
+									<div>
+										<h3 className="text-sm font-semibold mb-3 text-muted-foreground">
+											Status & Cycles
+										</h3>
+										<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+											<div className="space-y-1">
+												<p className="text-sm font-medium">Cycles</p>
+												<p className="text-2xl font-bold">
+													{action.cycles}/{action.maxCycles}
+												</p>
+											</div>
+											<div className="space-y-1">
+												<p className="text-sm font-medium">Status</p>
 												<span
-													className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+													className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${
 														action.status === "active"
 															? "bg-green-50 text-green-700"
 															: "bg-gray-50 text-gray-600"
@@ -162,40 +245,20 @@ function ActionsComponent() {
 												>
 													{action.status}
 												</span>
-											</TableCell>
-											<TableCell>
-												<div className="flex gap-2">
-													<Button
-														variant="outline"
-														size="sm"
-														onClick={() =>
-															navigate({ to: `/actions/${action.id}/edit` })
-														}
-														className="cursor-pointer"
-														disabled={deletingActionId === action.id}
-													>
-														Edit
-													</Button>
-													<Button
-														variant="outline"
-														size="sm"
-														onClick={() => action.id && handleDelete(action.id)}
-														disabled={
-															deletingActionId === action.id || !action.id
-														}
-														className="cursor-pointer"
-													>
-														{deletingActionId === action.id
-															? "Deleting..."
-															: "Delete"}
-													</Button>
+											</div>
+											{action.createdAt && (
+												<div className="space-y-1">
+													<p className="text-sm font-medium">Created</p>
+													<p className="text-sm text-muted-foreground">
+														{formatDate(action.createdAt)}
+													</p>
 												</div>
-											</TableCell>
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						</div>
+											)}
+										</div>
+									</div>
+								</div>
+							</CardContent>
+						</Card>
 					)}
 				</CardContent>
 			</Card>
