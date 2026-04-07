@@ -46,9 +46,9 @@ function LoginComponent() {
 		<div className="min-h-screen flex items-center justify-center bg-muted/40">
 			<Card className="w-full max-w-md">
 				<CardHeader>
-					<CardTitle>Login - v1.1</CardTitle>
+					<CardTitle>Login - v1.2</CardTitle>
 					<CardDescription>
-						Enter your credentials to access Auto-Grow
+						Enter your credentials to access Auto-Grow 🌿
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
